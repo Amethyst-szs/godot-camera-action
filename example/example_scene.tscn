@@ -1,12 +1,14 @@
-[gd_scene load_steps=4 format=3 uid="uid://x1bltb2xvatl"]
+[gd_scene load_steps=5 format=3 uid="uid://x1bltb2xvatl"]
 
 [ext_resource type="PackedScene" uid="uid://dodxjr8idtj5e" path="res://example/player/player.tscn" id="1_3fk7j"]
 [ext_resource type="Texture2D" uid="uid://cakrkgiy8aq08" path="res://example/player/player.png" id="2_l2fuc"]
-[ext_resource type="Script" path="res://addons/camera_action/node/camera_action_fixed.gd" id="3_g2hv7"]
+[ext_resource type="Script" path="res://addons/camera_action/node/action_fixed.gd" id="6_8qfdr"]
+[ext_resource type="Script" path="res://addons/camera_action/node/action_follow.gd" id="7_td0vu"]
 
 [node name="Root" type="Node2D"]
 
 [node name="Player" parent="." instance=ExtResource("1_3fk7j")]
+position = Vector2(-117, -21)
 
 [node name="Sprite" type="Sprite2D" parent="."]
 position = Vector2(313, 67)
@@ -14,11 +16,12 @@ scale = Vector2(8, 8)
 texture = ExtResource("2_l2fuc")
 
 [node name="CameraActionFixed" type="Node2D" parent="."]
-position = Vector2(18, 74)
-script = ExtResource("3_g2hv7")
-zoom = 3.235
-degrees = 19.1
-length = 0.6
-ease_type = 0
-ease_curve = 1
-show_in_game = true
+position = Vector2(371, -269)
+script = ExtResource("6_8qfdr")
+degrees = 4.5
+
+[node name="CameraActionFollow" type="Node2D" parent="."]
+position = Vector2(-495, 24)
+script = ExtResource("7_td0vu")
+degrees = -26.9
+offset = null

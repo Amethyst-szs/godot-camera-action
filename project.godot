@@ -16,6 +16,10 @@ run/main_scene="res://example/example_scene.tscn"
 config/features=PackedStringArray("4.2", "Mobile")
 config/icon="res://icon.svg"
 
+[autoload]
+
+CameraActionManager="*res://addons/camera_action/manager.gd"
+
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/camera_action/plugin.cfg")
