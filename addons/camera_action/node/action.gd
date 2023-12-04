@@ -1,7 +1,8 @@
 @tool
-@icon("res://icon.svg")
+@icon("res://addons/camera_action/icon/CameraAction.svg")
 
 extends Node2D
+## A base class for all CameraAction nodes, cannot be used standalone
 class_name CameraAction
 
 #region Variables & Exports

@@ -1,5 +1,5 @@
 @tool
-@icon("res://example/player/player.png")
+@icon("res://addons/camera_action/icon/CameraActionFollowFocus.svg")
 
 extends CameraActionFollow
 class_name CameraActionFollowFocus

@@ -24,8 +24,9 @@ script = ExtResource("3_7nuy1")
 allow_any = true
 
 [node name="CameraActionFixed" type="Node2D" parent="CameraArea2D"]
-position = Vector2(103, 29)
+position = Vector2(151, 38)
 script = ExtResource("4_fnh2w")
+degrees = 360.0
 ease_curve = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CameraArea2D"]

@@ -1,7 +1,8 @@
 @tool
-@icon("res://example/player/player.png")
+@icon("res://addons/camera_action/icon/CameraArea2D.svg")
 
 extends Area2D
+## Trigger a CameraAction by bodies or areas entering and leaving an Area2D
 class_name CameraArea2D
 
 @export var filter: CollisionObject2D = null
