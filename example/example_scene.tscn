@@ -1,20 +1,14 @@
-[gd_scene load_steps=9 format=3 uid="uid://x1bltb2xvatl"]
+[gd_scene load_steps=8 format=3 uid="uid://x1bltb2xvatl"]
 
 [ext_resource type="PackedScene" uid="uid://dodxjr8idtj5e" path="res://example/player/player.tscn" id="1_3fk7j"]
 [ext_resource type="Texture2D" uid="uid://cakrkgiy8aq08" path="res://example/player/player.png" id="2_l2fuc"]
-[ext_resource type="Script" path="res://addons/camera_action/area/camera_area_2d.gd" id="3_7nuy1"]
+[ext_resource type="Script" path="res://addons/camera_action/triggers/camera_area_2d.gd" id="3_7nuy1"]
 [ext_resource type="Script" path="res://addons/camera_action/node/action_follow.gd" id="5_fmmhq"]
-[ext_resource type="Script" path="res://addons/camera_action/node/action_path.gd" id="6_54kcq"]
+[ext_resource type="Script" path="res://addons/camera_action/triggers/action_switcher.gd" id="6_h0uyw"]
 [ext_resource type="Script" path="res://addons/camera_action/node/action_fixed.gd" id="7_3niw1"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o6siw"]
 size = Vector2(225, 315)
-
-[sub_resource type="Curve2D" id="Curve2D_brrbw"]
-_data = {
-"points": PackedVector2Array(0, 0, 0, 0, -523, -269, -103.181, 76.1952, 103.181, -76.1952, -298, -396, -120.642, 44.4472, 120.642, -44.4472, -49, -552, 0, 0, 0, 0, 245, 0)
-}
-point_count = 4
 
 [node name="Root" type="Node2D"]
 
@@ -32,6 +26,7 @@ priority = 1
 autostart = true
 
 [node name="CameraArea2D" type="Area2D" parent="."]
+visible = false
 position = Vector2(135, -99)
 script = ExtResource("3_7nuy1")
 allow_any = true
@@ -46,15 +41,14 @@ script = ExtResource("7_3niw1")
 zoom = 1.16
 degrees = -25.5
 
-[node name="Path2D" type="Path2D" parent="."]
-position = Vector2(-282, 71)
-curve = SubResource("Curve2D_brrbw")
+[node name="CameraActionSwitch" type="Node2D" parent="." node_paths=PackedStringArray("action_list")]
+script = ExtResource("6_h0uyw")
+action_list = [NodePath("../Top"), NodePath("../Bottom")]
 
-[node name="PathFollow2D" type="PathFollow2D" parent="Path2D"]
-position = Vector2(-523, -269)
-rotation = -0.513865
+[node name="Top" type="Node2D" parent="."]
+position = Vector2(219, -223)
+script = ExtResource("7_3niw1")
 
-[node name="CameraActionPath" type="Node2D" parent="Path2D/PathFollow2D"]
-script = ExtResource("6_54kcq")
-priority = 7
-autostart = true
+[node name="Bottom" type="Node2D" parent="."]
+position = Vector2(209, -9)
+script = ExtResource("7_3niw1")
