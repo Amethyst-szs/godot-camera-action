@@ -83,6 +83,9 @@ func start():
 	if not CameraActionManager.try_start(self):
 		return
 	
+	# Reset limits on camera, if this new action has limits it will set them up itself
+	_reset_limits()
+	
 	# Create tween and set start flag
 	_create_cam_tween()
 	is_starting = true
@@ -291,6 +294,15 @@ func set_debug_settings_visiblity_all(is_visible: bool) -> void:
 ## Gets a reference to the current viewport's camera
 func _get_cam() -> Camera2D:
 	return get_viewport().get_camera_2d()
+
+func _reset_limits() -> void:
+	var cam: Camera2D = _get_cam()
+	if not cam: return
+	
+	cam.limit_left = -10000000
+	cam.limit_top = -10000000
+	cam.limit_right = 10000000
+	cam.limit_bottom = 10000000
 
 ## Gets a vector of the viewport's size from the ProjectSettings
 func _get_default_viewport_size() -> Vector2:

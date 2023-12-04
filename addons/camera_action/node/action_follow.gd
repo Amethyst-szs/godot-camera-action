@@ -25,17 +25,12 @@ func start():
 	# Tween the position of the camera to zero (ensures it ends up centered again)
 	_add_property_to_tween_reference_list("position", "zero_vec", self, cam.position)
 	
-	# Enable the limits or reset them to default values
+	# Enable the limits if enabled
 	if apply_limits:
 		cam.limit_left = global_position.x - limit_left
 		cam.limit_top = global_position.y - limit_top
 		cam.limit_right = global_position.x + limit_right
 		cam.limit_bottom = global_position.y + limit_bottom
-	else:
-		cam.limit_left = -10000000
-		cam.limit_top = -10000000
-		cam.limit_right = 10000000
-		cam.limit_bottom = 10000000
 
 # Draw camera bounds and limits
 func _draw():
