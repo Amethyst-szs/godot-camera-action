@@ -2,6 +2,8 @@
 @icon("res://addons/camera_action/icon/CameraActionPath.svg")
 
 extends CameraActionSimple
+## Camera can be attached to a PathFollow2D and animated moving along the path,
+## optionally also including rotations
 class_name CameraActionPath
 
 @export var rotate_on_path: bool = false

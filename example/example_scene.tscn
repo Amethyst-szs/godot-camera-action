@@ -19,12 +19,12 @@ texture = ExtResource("2_l2fuc")
 
 [node name="CameraShake" type="Node2D" parent="."]
 script = ExtResource("5_subfi")
-duration = 1.6
 easing = 3
-ease_in_length = 1.0
+ease_in_length = 0.1
 
 [node name="DefaultCam" type="Node2D" parent="."]
 script = ExtResource("5_fmmhq")
+degrees = 90.0
 priority = 1
 autostart = true
 ease_curve = 1
