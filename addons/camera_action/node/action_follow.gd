@@ -40,7 +40,7 @@ func start():
 # Draw camera bounds and limits
 func _draw():
 	if _is_camera_drawing_available():
-		_draw_camera(Vector2.ZERO, zoom, degrees, Color.DARK_ORANGE)
+		_draw_camera(Vector2.ZERO, zoom, degrees, _get_debug_color().darkened(0.2))
 	
 	if apply_limits and _is_limit_drawing_available():
 		var limit_points: Array[Vector2] = [
@@ -50,8 +50,11 @@ func _draw():
 			Vector2(-limit_left, limit_bottom)
 		]
 		
-		_draw_rect_from_points(limit_points, Color.ORANGE, 5)
+		_draw_rect_from_points(limit_points, _get_debug_color(), 5)
 
 # Cannot have configuration warnings
 func _get_configuration_warnings():
 	return []
+
+func _get_debug_color() -> Color:
+	return Color.ORANGE

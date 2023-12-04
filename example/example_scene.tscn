@@ -36,11 +36,13 @@ position = Vector2(21.5, -167.5)
 shape = SubResource("RectangleShape2D_o6siw")
 
 [node name="CameraActionSimple" type="Node2D" parent="CameraArea2D"]
+visible = false
 position = Vector2(235.801, -82.7438)
 script = ExtResource("4_0g5bm")
 degrees = -63.7
 
 [node name="DefaultCamera" type="Node2D" parent="."]
+visible = false
 position = Vector2(-282, 71)
 script = ExtResource("5_fmmhq")
 priority = 1
@@ -58,6 +60,9 @@ rotation = -0.145042
 h_offset = 9.0
 
 [node name="CameraActionRail" type="Node2D" parent="Path2D/PathFollow2D"]
+position = Vector2(-890.689, -744.248)
+rotation = 0.145042
+scale = Vector2(1, 1)
 script = ExtResource("6_54kfg")
-priority = 7
+zoom = 0.435
 autostart = true

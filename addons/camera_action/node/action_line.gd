@@ -70,7 +70,7 @@ func update():
 
 # Draw camera bounds and limits
 func _draw():
-	var col: Color = Color.LIGHT_SKY_BLUE
+	var col: Color = _get_debug_color()
 	
 	if _is_camera_drawing_available():
 		_draw_camera(Vector2.ZERO, zoom, degrees, col)
@@ -109,3 +109,6 @@ func _calc_boundaries(is_add_global_position: bool = true) -> Rect2:
 		return Rect2(edge_l + global_position, edge_r + global_position)
 	else:
 		return Rect2(edge_l, edge_r)
+
+func _get_debug_color() -> Color:
+	return Color.MEDIUM_PURPLE

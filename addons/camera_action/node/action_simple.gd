@@ -38,9 +38,12 @@ func start():
 func _draw():
 	# Draw camera box if enabled
 	if _is_camera_drawing_available():
-		_draw_camera(Vector2.ZERO, zoom, degrees, Color.CORNFLOWER_BLUE)
+		_draw_camera(Vector2.ZERO, zoom, degrees, _get_debug_color())
 
 func _get_configuration_warnings():
 	return []
+
+func _get_debug_color() -> Color:
+	return Color.CORNFLOWER_BLUE
 
 #endregion

@@ -159,7 +159,7 @@ func _draw():
 	if not _is_camera_drawing_available(): return
 	
 	# Draw bounds of camera
-	_draw_camera(Vector2.ZERO, 1.0, 0.0, Color.RED)
+	_draw_camera(Vector2.ZERO, 1.0, 0.0, _get_debug_color())
 
 ## Draw the camera bounding box
 func _draw_camera(pos_center: Vector2, zoom: float, angle: float, color: Color) -> void:
@@ -189,7 +189,7 @@ func _draw_camera(pos_center: Vector2, zoom: float, angle: float, color: Color) 
 	
 	# Draw camera frame
 	_draw_rect_from_points(points, color, 3)
-	_draw_converging_from_points(pos_center, points, color.darkened(0.4), 1)
+	_draw_converging_from_points(pos_center, points, color.lightened(0.1), 1)
 
 ## Draw a rectangangle out of a list of points
 func _draw_rect_from_points(points: Array[Vector2], color: Color, thickness: float):
@@ -292,6 +292,9 @@ func _get_viewport_size() -> Vector2:
 		return _get_default_viewport_size()
 	
 	return get_viewport().size
+
+func _get_debug_color() -> Color:
+	return Color.RED
 
 ## Checks if the current configuration allows drawing the camera bounding box
 func _is_camera_drawing_available() -> bool:

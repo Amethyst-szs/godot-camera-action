@@ -47,3 +47,6 @@ func _calc_degrees_offset():
 	if get_parent() is PathFollow2D:
 		degrees_offset = degrees
 		if rotate_on_path: degrees_offset += get_parent().rotation_degrees
+
+func _get_debug_color() -> Color:
+	return Color.DEEP_PINK.darkened(0.2)

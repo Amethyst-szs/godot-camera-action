@@ -27,10 +27,13 @@ func update():
 func _draw():
 	# Draw camera box if enabled
 	if _is_camera_drawing_available():
-		_draw_camera(Vector2.ZERO, zoom, degrees, Color.MEDIUM_AQUAMARINE)
+		_draw_camera(Vector2.ZERO, zoom, degrees, _get_debug_color())
 
 # Cannot have config error
 func _get_configuration_warnings():
 	return []
+
+func _get_debug_color() -> Color:
+	return Color.MEDIUM_AQUAMARINE
 
 #endregion

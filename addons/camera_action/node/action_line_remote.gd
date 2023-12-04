@@ -30,3 +30,6 @@ func _get_configuration_warnings():
 		return ["Must set the remote node in inspector"]
 	
 	return []
+
+func _get_debug_color() -> Color:
+	return Color.MEDIUM_PURPLE.lightened(0.2)
