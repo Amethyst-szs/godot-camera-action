@@ -97,7 +97,11 @@ func try_start(action: CameraAction) -> bool:
 	
 	# If there is an active action already, move it into the queue and disable it
 	if active_action:
+		# Modify the ending active action based on config
 		if config_show_active_cam: active_action.set_debug_settings_visiblity_all(false)
+		
+		# Disconnect active action from signal functions
+		active_action.update_shake.disconnect(_update_shake.bind())
 		
 		previous_action = active_action
 		active_action.pause()
