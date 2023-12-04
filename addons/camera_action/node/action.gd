@@ -43,17 +43,20 @@ var tween_reference_list: Array[Dictionary] = []
 
 # Exports
 
-@export_category("Transition & Priority")
+## Enable a higher priority level than other CameraActions to override them
+@export var priority := CameraActionManager.PriorityType.NORMAL
+## Should this camera action be activated instantly on scene load?
+@export var autostart: bool = false
+
+@export_group("Transition")
 ## Duration in seconds it takes for the camera to change from current settings to new configuration
 @export_range(0.0, 5.0, 0.1, "or_greater") var length: float = 1.0
 ## Should the camera be eased in, out, or both
 @export var ease_type: Tween.EaseType = Tween.EASE_IN_OUT
 ## Curve for the easing animation to follow
 @export var ease_curve: Tween.TransitionType = Tween.TRANS_LINEAR
-## Enable a higher priority level than other CameraActions to override them
-@export var priority := CameraActionManager.PriorityType.NORMAL
 
-@export_category("Debugging")
+@export_group("Debugging")
 ## Show camera visualization in the editor viewport
 @export var show_camera: bool = true
 ## Show limit boundary box in editor viewport (if this CameraAction type supports limits)
@@ -67,6 +70,11 @@ const zero_vec: Vector2 = Vector2.ZERO
 #endregion
 
 #region Virtual Functions
+
+## Automatically run start if flag is set in inspector
+func _ready():
+	if not Engine.is_editor_hint() and autostart:
+		start()
 
 ## Start function, updates and animates camera
 func start():
@@ -106,6 +114,7 @@ func update():
 func pause():
 	is_starting = false
 	is_running = false
+	tween_timer = 0.0
 	
 	if tween:
 		tween.kill()
@@ -260,6 +269,12 @@ func _get_default_viewport_size() -> Vector2:
 	size.x = ProjectSettings.get_setting("display/window/size/viewport_width")
 	size.y = ProjectSettings.get_setting("display/window/size/viewport_height")
 	return size
+
+func _get_viewport_size() -> Vector2:
+	if Engine.is_editor_hint():
+		return _get_default_viewport_size()
+	
+	return get_viewport().size
 
 ## Checks if the current configuration allows drawing the camera bounding box
 func _is_camera_drawing_available() -> bool:

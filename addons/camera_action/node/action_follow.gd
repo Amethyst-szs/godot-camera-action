@@ -6,8 +6,7 @@ class_name CameraActionFollow
 
 #region Variables & Exports
 
-# Boundaries of camera, updated once action is applied
-@export_category("Limits")
+## Should this camera action have some outer bounds on how far the camera is able to travel?
 @export var apply_limits: bool = false
 @export_range(0, 1, 1, "or_greater", "hide_slider", "suffix:px") var limit_left: float = 1000
 @export_range(0, 1, 1, "or_greater", "hide_slider", "suffix:px") var limit_top: float = 600
@@ -21,6 +20,7 @@ func start():
 	var cam: Camera2D = _get_cam()
 	if not tween or not cam: return
 	
+	# Tween the position of the camera to zero (ensures it ends up centered again)
 	_add_property_to_tween_reference_list("position", "zero_vec", self, cam.position)
 	
 	# Enable the limits or reset them to default values
@@ -35,6 +35,7 @@ func start():
 		cam.limit_right = 10000000
 		cam.limit_bottom = 10000000
 
+# Draw camera bounds and limits
 func _draw():
 	if _is_camera_drawing_available():
 		_draw_camera(Vector2.ZERO, zoom, degrees, Color.DARK_ORANGE)
@@ -49,5 +50,6 @@ func _draw():
 		
 		_draw_rect_from_points(limit_points, Color.ORANGE, 5)
 
+# Cannot have configuration warnings
 func _get_configuration_warnings():
 	return []

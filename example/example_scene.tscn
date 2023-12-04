@@ -1,9 +1,13 @@
-[gd_scene load_steps=5 format=3 uid="uid://x1bltb2xvatl"]
+[gd_scene load_steps=7 format=3 uid="uid://x1bltb2xvatl"]
 
 [ext_resource type="PackedScene" uid="uid://dodxjr8idtj5e" path="res://example/player/player.tscn" id="1_3fk7j"]
 [ext_resource type="Texture2D" uid="uid://cakrkgiy8aq08" path="res://example/player/player.png" id="2_l2fuc"]
-[ext_resource type="Script" path="res://addons/camera_action/node/action_fixed.gd" id="6_8qfdr"]
-[ext_resource type="Script" path="res://addons/camera_action/node/action_follow.gd" id="7_td0vu"]
+[ext_resource type="Script" path="res://addons/camera_action/area/camera_area_2d.gd" id="3_7nuy1"]
+[ext_resource type="Script" path="res://addons/camera_action/node/action_fixed.gd" id="4_fnh2w"]
+[ext_resource type="Script" path="res://addons/camera_action/node/action_follow.gd" id="5_fmmhq"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_o6siw"]
+size = Vector2(144, 335)
 
 [node name="Root" type="Node2D"]
 
@@ -15,13 +19,24 @@ position = Vector2(313, 67)
 scale = Vector2(8, 8)
 texture = ExtResource("2_l2fuc")
 
-[node name="CameraActionFixed" type="Node2D" parent="."]
-position = Vector2(371, -269)
-script = ExtResource("6_8qfdr")
-degrees = 4.5
+[node name="CameraArea2D" type="Area2D" parent="."]
+script = ExtResource("3_7nuy1")
+allow_any = true
 
-[node name="CameraActionFollow" type="Node2D" parent="."]
-position = Vector2(-495, 24)
-script = ExtResource("7_td0vu")
-degrees = -26.9
-offset = null
+[node name="CameraActionFixed" type="Node2D" parent="CameraArea2D"]
+position = Vector2(103, 29)
+script = ExtResource("4_fnh2w")
+ease_curve = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CameraArea2D"]
+position = Vector2(62, -157.5)
+shape = SubResource("RectangleShape2D_o6siw")
+
+[node name="DefaultCamera" type="Node2D" parent="."]
+position = Vector2(-282, 71)
+script = ExtResource("5_fmmhq")
+priority = 1
+autostart = true
+ease_curve = 1
+show_camera = false
+show_limits = false

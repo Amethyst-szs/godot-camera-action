@@ -6,8 +6,6 @@ class_name CameraActionSimple
 
 #region Variables & Exports
 
-@export_category("Simple Properties")
-
 ## How far in/out should the camera be zoomed while this camera action is active
 @export var zoom: float = 1:
 	set(value):

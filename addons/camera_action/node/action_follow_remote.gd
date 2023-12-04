@@ -4,7 +4,7 @@
 extends CameraActionFollow
 class_name CameraActionFollowRemote
 
-@export_category("Remote Target")
+## What node should the camera track, ignoring its own parent in the process
 @export var remote_node: Node2D:
 	set(value):
 		remote_node = value
@@ -17,6 +17,7 @@ func start():
 	var cam: Camera2D = _get_cam()
 	if not tween or not cam: return
 	
+	# Remove position reference from parent super function, and add global position of remote
 	_remove_tween_reference("position")
 	_add_property_to_tween_reference_list("global_position", "global_position", remote_node, cam.global_position)
 
@@ -41,6 +42,7 @@ func _draw():
 		
 		_draw_rect_from_points(limit_points, Color.YELLOW, 5)
 
+# Display warning if remote node is not set
 func _get_configuration_warnings():
 	if not remote_node:
 		return ["Must set the remote node in inspector"]
