@@ -138,19 +138,31 @@ func end():
 	pause()
 	CameraActionManager.end(self)
 
-## Queues a redraw of the editor debug info if the editor hint exists
-func _process(_delta):
+## Update camera if update mode is idle
+## Also queues a redraw of the editor debug info if the editor hint exists
+func _process(delta):
 	if Engine.is_editor_hint():
 		queue_redraw()
+		return
+	
+	if CameraActionManager.is_update_mode_physics(): return
+	
+	var cam: Camera2D = CameraActionManager.get_camera()
+	if not cam: return
+	
+	if is_starting: update_transition(delta, cam)
+	if is_running: update(delta, cam)
 
-## Call the update function if running
+## Update camera if update mode is physics
 func _physics_process(delta):
-	if not Engine.is_editor_hint():
-		var cam: Camera2D = CameraActionManager.get_camera()
-		if not cam: return
-		
-		if is_starting: update_transition(delta, cam)
-		if is_running: update(delta, cam)
+	if Engine.is_editor_hint() or not CameraActionManager.is_update_mode_physics():
+		return
+	
+	var cam: Camera2D = CameraActionManager.get_camera()
+	if not cam: return
+	
+	if is_starting: update_transition(delta, cam)
+	if is_running: update(delta, cam)
 
 ## Display a warning if the user adds a basic CameraAction to their scene, not an inherited type
 func _get_configuration_warnings():

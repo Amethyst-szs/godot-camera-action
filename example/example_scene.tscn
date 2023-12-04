@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://dodxjr8idtj5e" path="res://example/player/player.tscn" id="1_3fk7j"]
 [ext_resource type="Script" path="res://example/example_scene.gd" id="1_sfhww"]
 [ext_resource type="Texture2D" uid="uid://cakrkgiy8aq08" path="res://example/player/player.png" id="2_l2fuc"]
-[ext_resource type="Script" path="res://addons/camera_action/node/action_follow.gd" id="5_fmmhq"]
+[ext_resource type="Script" path="res://addons/camera_action/node/action_fixed.gd" id="5_13iu2"]
 [ext_resource type="Script" path="res://addons/camera_action/shake/camera_shake.gd" id="5_subfi"]
 
 [node name="Root" type="Node2D"]
@@ -22,11 +22,9 @@ script = ExtResource("5_subfi")
 easing = 3
 ease_in_length = 0.1
 
-[node name="DefaultCam" type="Node2D" parent="."]
-script = ExtResource("5_fmmhq")
-degrees = 90.0
-priority = 1
+[node name="CameraActionFixed" type="Node2D" parent="."]
+position = Vector2(-283, -174)
+script = ExtResource("5_13iu2")
+zoom = 0.735
+degrees = 34.6
 autostart = true
-ease_curve = 1
-show_camera = false
-show_limits = false
