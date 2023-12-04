@@ -287,7 +287,7 @@ Move with WASD or arrow keys
 Run with Shift"
 horizontal_alignment = 1
 
-[node name="ActionLineExplained" type="Label" parent="Text"]
+[node name="Intro2" type="Label" parent="Text"]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -303,21 +303,6 @@ text = "CameraActionLine:
 Camera follows along a fixed line vertically,
 horizontally, or diagonally!
 Try it out in this hallway"
-horizontal_alignment = 1
-
-[node name="Intro3" type="Label" parent="Text"]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 1052.0
-offset_top = -1252.0
-offset_right = 1390.0
-offset_bottom = -1151.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "Diagonals are bugged rn sorry"
 horizontal_alignment = 1
 
 [node name="Cameras" type="Node2D" parent="."]
@@ -337,7 +322,6 @@ script = ExtResource("5_gokxs")
 angle = 90.0
 min_distance = 875.0
 max_distance = 1500.0
-ease_components = 0
 priority = 3
 ease_curve = 1
 show_camera = false
@@ -357,7 +341,6 @@ position = Vector2(119, -16)
 script = ExtResource("5_gokxs")
 min_distance = 2000.0
 max_distance = 2000.0
-ease_components = 1
 priority = 2
 length = 0.5
 ease_curve = 1
@@ -379,6 +362,5 @@ angle = -45.0
 min_distance = 10000.0
 max_distance = 10000.0
 priority = 3
-ease_type = 3
 ease_curve = 1
 show_camera = false

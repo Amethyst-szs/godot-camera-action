@@ -4,6 +4,17 @@
 extends CameraActionSimple
 ## Camera will follow a fixed line segment at any angle
 class_name CameraActionLine
+func get_class(): return "CameraActionLine"
+
+#region Enums
+
+enum EaseComponenets {
+	X,
+	Y,
+	BOTH
+}
+
+#endregion
 
 #region Variables & Exports
 
@@ -18,6 +29,8 @@ class_name CameraActionLine
 @export_range(0, 1, 1, "or_greater", "hide_slider", "suffix:px") var min_distance: float = 1000
 ## Highest value the camera can go on this line
 @export_range(0, 1, 1, "or_greater", "hide_slider", "suffix:px") var max_distance: float = 1000
+## Should the X, Y, or both vector components be eased during camera start
+@export var ease_components := EaseComponenets.BOTH
 
 ## Line angle variable converted to radians automatically
 var angle_rad: float = 0.0
@@ -36,7 +49,20 @@ func start():
 	
 	# Calculate start position and add global_position tween
 	_calc_target_cam_pos(cam)
-	_add_property_to_tween_reference_list("global_position", "target_cam_pos", self, cam.global_position)
+	
+	# If coming from a previous action of CameraActionLine, set ease components to both
+	var previous_action: CameraAction = CameraActionManager.previous_action
+	if is_instance_valid(previous_action) and previous_action is CameraActionLine:
+		_add_property_to_tween_reference_list("global_position", "target_cam_pos", self, cam.global_position)
+	else:
+		# Add different property to tween list depending on ease components
+		match(ease_components):
+			EaseComponenets.BOTH:
+				_add_property_to_tween_reference_list("global_position", "target_cam_pos", self, cam.global_position)
+			EaseComponenets.X:
+				_add_property_to_tween_reference_list("global_position", "target_cam_pos", self, cam.global_position, "x")
+			EaseComponenets.Y:
+				_add_property_to_tween_reference_list("global_position", "target_cam_pos", self, cam.global_position, "y")
 	
 	# Enable limits based on boundaries
 	var bounds: Rect2 = _calc_boundaries(true)
@@ -89,9 +115,13 @@ func _calc_target_cam_pos(cam: Camera2D):
 	var point: Vector2 = _get_base_target_pos(cam)
 	
 	# Convert camera parent node position to closest point on line
-	var v := point - bounds.position
+	var v: Vector2 = point - bounds.position
 	var d := v.dot(angle_dir)
 	target_cam_pos = bounds.position + (angle_dir * d)
+	
+	if angle < 0:
+		var bounds_local := _calc_boundaries(false)
+		#target_cam_pos.y -= target_cam_pos.y - bounds_local.size.y
 
 func _get_base_target_pos(cam: Camera2D):
 	# Gets the camera's parent node and its global position

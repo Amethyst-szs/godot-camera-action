@@ -21,7 +21,7 @@ var config_override_cam: Camera2D = null
 
 ## Always show the currently active camera box while in game.
 ## Very useful in debugging to visualize how your camera is behaving
-var config_show_active_cam: bool = false:
+var config_show_active_cam: bool = true:
 	set(value):
 		config_show_active_cam = value
 		if active_action:
@@ -75,6 +75,11 @@ var active_priority := PriorityType.NONE
 ## Current CameraAction node that is controlling the camera
 var active_action: CameraAction = null
 
+## The node of the previous action, used in some CameraAction types to aid in transitions
+## Make sure to check this is a valid instance!! There will likely be data in here after
+## a scene is destroyed.
+var previous_action: CameraAction = null
+
 ## Called whenever a CameraAction has its "start" method called
 ## Attempts to either replace the current active action or add the new action to the queue
 func try_start(action: CameraAction) -> bool:
@@ -93,6 +98,8 @@ func try_start(action: CameraAction) -> bool:
 	# If there is an active action already, move it into the queue and disable it
 	if active_action:
 		if config_show_active_cam: active_action.set_debug_settings_visiblity_all(false)
+		
+		previous_action = active_action
 		active_action.pause()
 		action_queue.push_back(active_action)
 		active_action.is_in_queue = true
@@ -126,8 +133,8 @@ func end(action: CameraAction) -> void:
 		# Modify the ending active action based on config
 		if config_show_active_cam: active_action.set_debug_settings_visiblity_all(false)
 		
+		previous_action = active_action
 		active_action = null
-		
 		
 		# Look for a new active action to start
 		_try_start_new_action_with_queue()
