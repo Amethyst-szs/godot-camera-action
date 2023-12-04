@@ -164,7 +164,7 @@ func _draw():
 ## Draw the camera bounding box
 func _draw_camera(pos_center: Vector2, zoom: float, angle: float, color: Color) -> void:
 	# Create radian angle
-	var angle_rad: float = deg_to_rad(angle)
+	var angle_rad: float = deg_to_rad(angle - global_rotation_degrees)
 	
 	# Calculate size of camera and offset using zoom parameter
 	var size: Vector2 = _get_default_viewport_size()
@@ -207,7 +207,7 @@ func _draw_converging_from_points(center: Vector2, points: Array[Vector2], color
 
 #endregion
 
-#region General Utility Functions
+#region Tweening System
 
 ## Creates the camera tween and sets up settings
 func _create_cam_tween() -> void:
@@ -275,6 +275,18 @@ func _remove_tween_reference(cam_var_name: String, componenent: String = "") -> 
 ## Destroy the list of tween properties, leave. no. survivors.
 func _destroy_tween_reference_list() -> void:
 	tween_reference_list.clear()
+
+#endregion
+
+#region General Utility Functions
+
+## Toggles the state of show_camera, show_limits, and show_in_game all at once
+func set_debug_settings_visiblity_all(is_visible: bool) -> void:
+	visible = is_visible
+	show_camera = is_visible
+	show_limits = is_visible
+	show_in_game = is_visible
+	queue_redraw()
 
 ## Gets a reference to the current viewport's camera
 func _get_cam() -> Camera2D:

@@ -1,6 +1,18 @@
 extends Node
 
-#region Variables and Priority Enum
+#region User - Configuration Variables & Methods
+
+var config_show_active_cam: bool = false:
+	set(value):
+		config_show_active_cam = value
+		if active_action:
+			active_action.set_debug_settings_visiblity_all(true)
+	get:
+		return config_show_active_cam
+
+#endregion
+
+#region Backend - Priority System
 
 ## Determines the priority of a CameraAction, any action that is started during another action
 ## with higher priority will be queued until the higher priority actions are finished
@@ -25,10 +37,6 @@ var active_priority := PriorityType.NONE
 ## Current CameraAction node that is controlling the camera
 var active_action: CameraAction = null
 
-#endregion
-
-#region Active and Queue Management Functions
-
 ## Called whenever a CameraAction has its "start" method called
 ## Attempts to either replace the current active action or add the new action to the queue
 func try_start(action: CameraAction) -> bool:
@@ -46,6 +54,7 @@ func try_start(action: CameraAction) -> bool:
 	
 	# If there is an active action already, move it into the queue and disable it
 	if active_action:
+		if config_show_active_cam: active_action.set_debug_settings_visiblity_all(false)
 		active_action.pause()
 		action_queue.push_back(active_action)
 		active_action.is_in_queue = true
@@ -54,6 +63,10 @@ func try_start(action: CameraAction) -> bool:
 	active_priority = action.priority
 	active_action = action
 	action.is_in_queue = false
+	
+	# Setup parts of this action based on the user config
+	if config_show_active_cam: action.set_debug_settings_visiblity_all(true)
+	
 	return true
 
 ## Called whenever a CameraAction is ended, either by the user or cause it is leaving the tree
@@ -67,6 +80,11 @@ func end(action: CameraAction) -> void:
 	# If ending the active action, search for a new active action
 	if active_action == action:
 		active_action = null
+		
+		# Setup the ending action node based on config
+		if config_show_active_cam: action.set_debug_settings_visiblity_all(false)
+		
+		# Look for a new active action to start
 		_try_start_new_action_with_queue()
 	
 	# If there is no active action, ensure the active priority is reset to NONE

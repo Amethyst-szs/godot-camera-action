@@ -1,8 +1,8 @@
 @tool
-@icon("res://addons/camera_action/icon/CameraActionRail.svg")
+@icon("res://addons/camera_action/icon/CameraActionPath.svg")
 
 extends CameraActionSimple
-class_name CameraActionRail
+class_name CameraActionPath
 
 @export var rotate_on_path: bool = false
 
@@ -35,6 +35,17 @@ func update():
 	_calc_degrees_offset()
 	cam.global_position = global_position
 	cam.rotation_degrees = degrees_offset
+	
+	if not Engine.is_editor_hint() and show_in_game:
+		queue_redraw()
+
+func _draw():
+	# Draw camera box if enabled
+	var rotate: float = degrees
+	if rotate_on_path: rotate += global_rotation_degrees
+	
+	if _is_camera_drawing_available():
+		_draw_camera(Vector2.ZERO, zoom, rotate, _get_debug_color())
 
 # Display warning if remote node is not set
 func _get_configuration_warnings():

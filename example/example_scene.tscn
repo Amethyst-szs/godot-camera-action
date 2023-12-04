@@ -3,16 +3,16 @@
 [ext_resource type="PackedScene" uid="uid://dodxjr8idtj5e" path="res://example/player/player.tscn" id="1_3fk7j"]
 [ext_resource type="Texture2D" uid="uid://cakrkgiy8aq08" path="res://example/player/player.png" id="2_l2fuc"]
 [ext_resource type="Script" path="res://addons/camera_action/area/camera_area_2d.gd" id="3_7nuy1"]
-[ext_resource type="Script" path="res://addons/camera_action/node/action_simple.gd" id="4_0g5bm"]
 [ext_resource type="Script" path="res://addons/camera_action/node/action_follow.gd" id="5_fmmhq"]
-[ext_resource type="Script" path="res://addons/camera_action/node/action_rail.gd" id="6_54kfg"]
+[ext_resource type="Script" path="res://addons/camera_action/node/action_path.gd" id="6_54kcq"]
+[ext_resource type="Script" path="res://addons/camera_action/node/action_fixed.gd" id="7_3niw1"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o6siw"]
 size = Vector2(225, 315)
 
-[sub_resource type="Curve2D" id="Curve2D_jsfgv"]
+[sub_resource type="Curve2D" id="Curve2D_brrbw"]
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, -59, 101, -76.5216, 19.3406, 76.5216, -19.3406, 208, 62, -155.721, 35.0087, 155.721, -35.0087, 455, -124, 0, 0, 0, 0, 617, -35)
+"points": PackedVector2Array(0, 0, 0, 0, -523, -269, -103.181, 76.1952, 103.181, -76.1952, -298, -396, -120.642, 44.4472, 120.642, -44.4472, -49, -552, 0, 0, 0, 0, 245, 0)
 }
 point_count = 4
 
@@ -26,6 +26,11 @@ position = Vector2(-67, -113)
 scale = Vector2(8, 8)
 texture = ExtResource("2_l2fuc")
 
+[node name="DefaultCam" type="Node2D" parent="."]
+script = ExtResource("5_fmmhq")
+priority = 1
+autostart = true
+
 [node name="CameraArea2D" type="Area2D" parent="."]
 position = Vector2(135, -99)
 script = ExtResource("3_7nuy1")
@@ -35,34 +40,21 @@ allow_any = true
 position = Vector2(21.5, -167.5)
 shape = SubResource("RectangleShape2D_o6siw")
 
-[node name="CameraActionSimple" type="Node2D" parent="CameraArea2D"]
-visible = false
-position = Vector2(235.801, -82.7438)
-script = ExtResource("4_0g5bm")
-degrees = -63.7
-
-[node name="DefaultCamera" type="Node2D" parent="."]
-visible = false
-position = Vector2(-282, 71)
-script = ExtResource("5_fmmhq")
-priority = 1
-autostart = true
-ease_curve = 1
-show_camera = false
-show_limits = false
+[node name="CameraActionFixed" type="Node2D" parent="CameraArea2D"]
+position = Vector2(209, -141)
+script = ExtResource("7_3niw1")
+zoom = 1.16
+degrees = -25.5
 
 [node name="Path2D" type="Path2D" parent="."]
-curve = SubResource("Curve2D_jsfgv")
+position = Vector2(-282, 71)
+curve = SubResource("Curve2D_brrbw")
 
 [node name="PathFollow2D" type="PathFollow2D" parent="Path2D"]
-position = Vector2(-50.0945, 99.6992)
-rotation = -0.145042
-h_offset = 9.0
+position = Vector2(-523, -269)
+rotation = -0.513865
 
-[node name="CameraActionRail" type="Node2D" parent="Path2D/PathFollow2D"]
-position = Vector2(-890.689, -744.248)
-rotation = 0.145042
-scale = Vector2(1, 1)
-script = ExtResource("6_54kfg")
-zoom = 0.435
+[node name="CameraActionPath" type="Node2D" parent="Path2D/PathFollow2D"]
+script = ExtResource("6_54kcq")
+priority = 7
 autostart = true

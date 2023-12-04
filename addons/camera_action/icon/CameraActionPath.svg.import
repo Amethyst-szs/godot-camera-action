@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://yjbfe81i1wkb"
-path="res://.godot/imported/CameraActionRail.svg-a7ef8ecedd9dbc807a58964ec58556f6.ctex"
+path="res://.godot/imported/CameraActionPath.svg-7b1dd568901a2af4b65028104255a0a0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/camera_action/icon/CameraActionRail.svg"
-dest_files=["res://.godot/imported/CameraActionRail.svg-a7ef8ecedd9dbc807a58964ec58556f6.ctex"]
+source_file="res://addons/camera_action/icon/CameraActionPath.svg"
+dest_files=["res://.godot/imported/CameraActionPath.svg-7b1dd568901a2af4b65028104255a0a0.ctex"]
 
 [params]
 
