@@ -241,7 +241,7 @@ func _add_property_to_tween_reference_list(cam_var_name: String, target_var_name
 ## Called during update_transition to animate all tweens
 ## Uses the tween reference list to animate using interpolate_value
 func _update_tween_reference_list() -> void:
-	var cam: Camera2D = _get_cam()
+	var cam: Camera2D = CameraActionManager.get_camera()
 	if not tween or not cam: return
 	
 	# Iterate through the whole tween reference list
@@ -291,12 +291,8 @@ func set_debug_settings_visiblity_all(is_visible: bool) -> void:
 	show_in_game = is_visible
 	queue_redraw()
 
-## Gets a reference to the current viewport's camera
-func _get_cam() -> Camera2D:
-	return get_viewport().get_camera_2d()
-
 func _reset_limits() -> void:
-	var cam: Camera2D = _get_cam()
+	var cam: Camera2D = CameraActionManager.get_camera()
 	if not cam: return
 	
 	cam.limit_left = -10000000

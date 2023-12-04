@@ -29,7 +29,7 @@ func _ready():
 
 func start():
 	super()
-	var cam: Camera2D = _get_cam()
+	var cam: Camera2D = CameraActionManager.get_camera()
 	if not tween or not cam: return
 	
 	_calc_target(cam)
@@ -38,14 +38,14 @@ func start():
 	_add_property_to_tween_reference_list("global_position", "target_pos", self, cam.global_position)
 
 func update_transition(delta: float):
-	var cam: Camera2D = _get_cam()
+	var cam: Camera2D = CameraActionManager.get_camera()
 	if not cam: return
 	
 	_calc_target(cam)
 	super(delta)
 
 func update():
-	var cam: Camera2D = _get_cam()
+	var cam: Camera2D = CameraActionManager.get_camera()
 	if not cam: return
 	
 	_calc_target(cam)

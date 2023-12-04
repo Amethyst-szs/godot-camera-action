@@ -19,7 +19,7 @@ class_name CameraActionFollow
 
 func start():
 	super()
-	var cam: Camera2D = _get_cam()
+	var cam: Camera2D = CameraActionManager.get_camera()
 	if not tween or not cam: return
 	
 	# Tween the position of the camera to zero (ensures it ends up centered again)

@@ -31,7 +31,7 @@ var target_cam_pos: Vector2 = Vector2.ZERO
 
 func start():
 	super()
-	var cam: Camera2D = _get_cam()
+	var cam: Camera2D = CameraActionManager.get_camera()
 	if not tween or not cam: return
 	
 	# Calculate start position and add global_position tween
@@ -55,14 +55,14 @@ func start():
 			cam.limit_bottom = bounds.size.y
 
 func update_transition(delta: float):
-	var cam: Camera2D = _get_cam()
+	var cam: Camera2D = CameraActionManager.get_camera()
 	if not cam: return
 	
 	_calc_target_cam_pos(cam)
 	super(delta)
 
 func update():
-	var cam: Camera2D = _get_cam()
+	var cam: Camera2D = CameraActionManager.get_camera()
 	if not cam: return
 	
 	_calc_target_cam_pos(cam)

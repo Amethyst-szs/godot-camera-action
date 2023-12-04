@@ -10,14 +10,14 @@ class_name CameraActionFixed
 # Add global position to tween list
 func start():
 	super()
-	var cam: Camera2D = _get_cam()
+	var cam: Camera2D = CameraActionManager.get_camera()
 	if not tween or not cam: return
 	
 	_add_property_to_tween_reference_list("global_position", "global_position", self, cam.global_position)
 
 # Every _physics_process, update global position
 func update():
-	var cam: Camera2D = _get_cam()
+	var cam: Camera2D = CameraActionManager.get_camera()
 	if not cam: return
 	
 	# While camera is active, update global position to this node

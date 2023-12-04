@@ -17,7 +17,7 @@ func _ready():
 
 func start():
 	super()
-	var cam: Camera2D = _get_cam()
+	var cam: Camera2D = CameraActionManager.get_camera()
 	if not tween or not cam: return
 	
 	_calc_degrees_offset()
@@ -29,7 +29,7 @@ func update_transition(delta: float):
 	_calc_degrees_offset()
 
 func update():
-	var cam: Camera2D = _get_cam()
+	var cam: Camera2D = CameraActionManager.get_camera()
 	if not cam: return
 	
 	_calc_degrees_offset()

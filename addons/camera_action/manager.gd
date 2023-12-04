@@ -2,6 +2,8 @@ extends Node
 
 #region User - Configuration Variables & Methods
 
+## Always show the currently active camera box while in game.
+## Very useful in debugging to visualize how your camera is behaving
 var config_show_active_cam: bool = false:
 	set(value):
 		config_show_active_cam = value
@@ -9,6 +11,20 @@ var config_show_active_cam: bool = false:
 			active_action.set_debug_settings_visiblity_all(true)
 	get:
 		return config_show_active_cam
+
+## By default CameraActions will affect the active Camera2D in the main viewport
+## Set this value to another Camera2D to override this behavior
+var config_override_cam: Camera2D = null
+
+#endregion
+
+#region Backend - Utilities
+
+func get_camera():
+	if config_override_cam:
+		return config_override_cam
+	
+	return get_viewport().get_camera_2d()
 
 #endregion
 
