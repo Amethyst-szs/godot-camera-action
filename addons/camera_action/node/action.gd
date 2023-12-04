@@ -265,8 +265,12 @@ func _update_tween_reference_list() -> void:
 ## Mainly used in inherited classes to remove a reference added by their parent
 func _remove_tween_reference(cam_var_name: String, componenent: String = "") -> void:
 	for item in tween_reference_list:
-		if item["cam_var"] == cam_var_name and item["component"] == componenent:
-			tween_reference_list.erase(item)
+		if not componenent.is_empty():
+			if item["cam_var"] == cam_var_name and item["component"] == componenent:
+				tween_reference_list.erase(item)
+		else:
+			if item["cam_var"] == cam_var_name:
+				tween_reference_list.erase(item)
 
 ## Destroy the list of tween properties, leave. no. survivors.
 func _destroy_tween_reference_list() -> void:

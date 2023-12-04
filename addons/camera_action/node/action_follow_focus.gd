@@ -20,6 +20,13 @@ class_name CameraActionFollowFocus
 var target_pos: Vector2 = Vector2.ZERO
 var initial_zoom: float = 0.0
 
+func _ready():
+	if not focus_node:
+		push_error("CameraActionFollowFocus doesn't have focus node set!\n%s" % [get_path()])
+		return
+	
+	super()
+
 func start():
 	super()
 	var cam: Camera2D = _get_cam()

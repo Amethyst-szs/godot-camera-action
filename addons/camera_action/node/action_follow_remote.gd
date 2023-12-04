@@ -15,9 +15,11 @@ class_name CameraActionFollowRemote
 		return remote_node
 
 func _ready():
-	super()
 	if not remote_node:
-		push_error("CameraActionFollowRemote doesn't have remote node set!")
+		push_error("CameraActionFollowRemote doesn't have remote node set!\n%s" % [get_path()])
+		return
+	
+	super()
 
 func start():
 	super()

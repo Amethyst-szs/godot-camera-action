@@ -1,14 +1,20 @@
-[gd_scene load_steps=8 format=3 uid="uid://x1bltb2xvatl"]
+[gd_scene load_steps=9 format=3 uid="uid://x1bltb2xvatl"]
 
 [ext_resource type="PackedScene" uid="uid://dodxjr8idtj5e" path="res://example/player/player.tscn" id="1_3fk7j"]
 [ext_resource type="Texture2D" uid="uid://cakrkgiy8aq08" path="res://example/player/player.png" id="2_l2fuc"]
 [ext_resource type="Script" path="res://addons/camera_action/area/camera_area_2d.gd" id="3_7nuy1"]
 [ext_resource type="Script" path="res://addons/camera_action/node/action_simple.gd" id="4_0g5bm"]
 [ext_resource type="Script" path="res://addons/camera_action/node/action_follow.gd" id="5_fmmhq"]
-[ext_resource type="Script" path="res://addons/camera_action/node/action_line_remote.gd" id="6_8bep4"]
+[ext_resource type="Script" path="res://addons/camera_action/node/action_rail.gd" id="6_54kfg"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o6siw"]
 size = Vector2(225, 315)
+
+[sub_resource type="Curve2D" id="Curve2D_jsfgv"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, -59, 101, -76.5216, 19.3406, 76.5216, -19.3406, 208, 62, -155.721, 35.0087, 155.721, -35.0087, 455, -124, 0, 0, 0, 0, 617, -35)
+}
+point_count = 4
 
 [node name="Root" type="Node2D"]
 
@@ -38,15 +44,20 @@ degrees = -63.7
 position = Vector2(-282, 71)
 script = ExtResource("5_fmmhq")
 priority = 1
+autostart = true
 ease_curve = 1
 show_camera = false
 show_limits = false
 
-[node name="CameraActionLineRemote" type="Node2D" parent="." node_paths=PackedStringArray("remote_node")]
-position = Vector2(-470, 58)
-script = ExtResource("6_8bep4")
-remote_node = NodePath("../Sprite")
-angle = 90.0
-zoom = 0.1
+[node name="Path2D" type="Path2D" parent="."]
+curve = SubResource("Curve2D_jsfgv")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Path2D"]
+position = Vector2(-50.0945, 99.6992)
+rotation = -0.145042
+h_offset = 9.0
+
+[node name="CameraActionRail" type="Node2D" parent="Path2D/PathFollow2D"]
+script = ExtResource("6_54kfg")
 priority = 7
 autostart = true
