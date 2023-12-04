@@ -2,6 +2,8 @@
 @icon("res://addons/camera_action/icon/CameraActionFollow.svg")
 
 extends CameraActionSimple
+## Camera will follow its parent node, much like normal behavior, but with added
+## control over animation due to inheriting CameraActionSimple
 class_name CameraActionFollow
 
 #region Variables & Exports

@@ -2,6 +2,7 @@
 @icon("res://addons/camera_action/icon/CameraActionFixed.svg")
 
 extends CameraActionSimple
+## A simple fixed camera position
 class_name CameraActionFixed
 
 #region Virtual Functions

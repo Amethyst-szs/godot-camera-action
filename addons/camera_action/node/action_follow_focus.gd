@@ -2,8 +2,11 @@
 @icon("res://addons/camera_action/icon/CameraActionFollowFocus.svg")
 
 extends CameraActionFollow
+## Target a mid-point between the camera's parent node and another node,
+## attempting to frame both in the shot
 class_name CameraActionFollowFocus
 
+## What node should should be the endpoint
 @export var focus_node: Node2D:
 	set(value):
 		focus_node = value
@@ -11,6 +14,7 @@ class_name CameraActionFollowFocus
 	get:
 		return focus_node
 
+## What point between the camera's parent and the focus node should be targetted (Range 0-1)
 @export_range(0.0, 1.0, 0.05) var midpoint: float = 0.5
 
 var target_pos: Vector2 = Vector2.ZERO

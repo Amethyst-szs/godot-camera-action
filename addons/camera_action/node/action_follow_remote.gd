@@ -2,6 +2,8 @@
 @icon("res://addons/camera_action/icon/CameraActionFollowRemote.svg")
 
 extends CameraActionFollow
+## Identical to CameraActionFollow, except instead of following the camera's parent, you can
+## follow any Node2D in the scene
 class_name CameraActionFollowRemote
 
 ## What node should the camera track, ignoring its own parent in the process

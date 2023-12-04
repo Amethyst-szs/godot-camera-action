@@ -2,7 +2,7 @@
 @icon("res://addons/camera_action/icon/CameraActionLine.svg")
 
 extends CameraActionSimple
-## CameraAction allowing the camera to follow a fixed line segment at any angle
+## Camera will follow a fixed line segment at any angle
 class_name CameraActionLine
 
 #region Variables & Exports

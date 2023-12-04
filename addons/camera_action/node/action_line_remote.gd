@@ -2,8 +2,11 @@
 @icon("res://addons/camera_action/icon/CameraActionLineRemote.svg")
 
 extends CameraActionLine
+## Identical to CameraActionLine, except instead of following the camera's parent, you can
+## follow any Node2D in the scene
 class_name CameraActionLineRemote
 
+## What node should the camera track, ignoring its own parent in the process
 @export var remote_node: Node2D:
 	set(value):
 		remote_node = value
