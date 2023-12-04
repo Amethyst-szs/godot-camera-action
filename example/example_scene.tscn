@@ -1,16 +1,13 @@
-[gd_scene load_steps=8 format=3 uid="uid://x1bltb2xvatl"]
+[gd_scene load_steps=6 format=3 uid="uid://x1bltb2xvatl"]
 
 [ext_resource type="PackedScene" uid="uid://dodxjr8idtj5e" path="res://example/player/player.tscn" id="1_3fk7j"]
+[ext_resource type="Script" path="res://example/example_scene.gd" id="1_sfhww"]
 [ext_resource type="Texture2D" uid="uid://cakrkgiy8aq08" path="res://example/player/player.png" id="2_l2fuc"]
-[ext_resource type="Script" path="res://addons/camera_action/triggers/camera_area_2d.gd" id="3_7nuy1"]
 [ext_resource type="Script" path="res://addons/camera_action/node/action_follow.gd" id="5_fmmhq"]
-[ext_resource type="Script" path="res://addons/camera_action/triggers/action_switcher.gd" id="6_h0uyw"]
-[ext_resource type="Script" path="res://addons/camera_action/node/action_fixed.gd" id="7_3niw1"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_o6siw"]
-size = Vector2(225, 315)
+[ext_resource type="Script" path="res://addons/camera_action/shake/camera_shake.gd" id="5_subfi"]
 
 [node name="Root" type="Node2D"]
+script = ExtResource("1_sfhww")
 
 [node name="Player" parent="." instance=ExtResource("1_3fk7j")]
 position = Vector2(-423, 30)
@@ -20,35 +17,16 @@ position = Vector2(-67, -113)
 scale = Vector2(8, 8)
 texture = ExtResource("2_l2fuc")
 
+[node name="CameraShake" type="Node2D" parent="."]
+script = ExtResource("5_subfi")
+duration = 1.6
+easing = 3
+ease_in_length = 1.0
+
 [node name="DefaultCam" type="Node2D" parent="."]
 script = ExtResource("5_fmmhq")
 priority = 1
 autostart = true
-
-[node name="CameraArea2D" type="Area2D" parent="."]
-visible = false
-position = Vector2(135, -99)
-script = ExtResource("3_7nuy1")
-allow_any = true
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CameraArea2D"]
-position = Vector2(21.5, -167.5)
-shape = SubResource("RectangleShape2D_o6siw")
-
-[node name="CameraActionFixed" type="Node2D" parent="CameraArea2D"]
-position = Vector2(209, -141)
-script = ExtResource("7_3niw1")
-zoom = 1.16
-degrees = -25.5
-
-[node name="CameraActionSwitch" type="Node2D" parent="." node_paths=PackedStringArray("action_list")]
-script = ExtResource("6_h0uyw")
-action_list = [NodePath("../Top"), NodePath("../Bottom")]
-
-[node name="Top" type="Node2D" parent="."]
-position = Vector2(219, -223)
-script = ExtResource("7_3niw1")
-
-[node name="Bottom" type="Node2D" parent="."]
-position = Vector2(209, -9)
-script = ExtResource("7_3niw1")
+ease_curve = 1
+show_camera = false
+show_limits = false

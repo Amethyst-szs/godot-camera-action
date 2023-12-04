@@ -33,6 +33,9 @@ var test_end: bool = false:
 	get:
 		return false
 
+# State signals
+signal update_shake(delta: float)
+
 # Tweening
 
 ## Reference to the transition tween. Is null if animation isn't currently playing.
@@ -101,8 +104,11 @@ func start_finished():
 
 ## Called every frame during _physics_process if the is_staring flag is set.
 ## This means it will only be called during the tween transition
-func update_transition(delta: float):
+func update_transition(delta: float, cam: Camera2D):
 	_update_tween_reference_list()
+	
+	if self == CameraActionManager.active_action:
+		update_shake.emit(delta)
 	
 	if tween_timer >= length:
 		tween_timer = 0
@@ -110,8 +116,9 @@ func update_transition(delta: float):
 
 ## Called every frame during _physics_process if the is_running flag is set.
 ## This means it will only be called after the transition animation completes
-func update():
-	pass
+func update(delta: float, cam: Camera2D):
+	if self == CameraActionManager.active_action:
+		update_shake.emit(delta)
 
 ## Called when the CameraActionManager is given a new CameraAction with a higher priority than this one.
 ## This action will be placed in the queue and wait for itself to be highest priority again
@@ -139,8 +146,11 @@ func _process(_delta):
 ## Call the update function if running
 func _physics_process(delta):
 	if not Engine.is_editor_hint():
-		if is_starting: update_transition(delta)
-		if is_running: update()
+		var cam: Camera2D = CameraActionManager.get_camera()
+		if not cam: return
+		
+		if is_starting: update_transition(delta, cam)
+		if is_running: update(delta, cam)
 
 ## Display a warning if the user adds a basic CameraAction to their scene, not an inherited type
 func _get_configuration_warnings():

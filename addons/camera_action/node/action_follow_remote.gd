@@ -30,12 +30,11 @@ func start():
 	_remove_tween_reference("position")
 	_add_property_to_tween_reference_list("global_position", "global_position", remote_node, cam.global_position)
 
-func update():
-	var cam: Camera2D = CameraActionManager.get_camera()
-	if not cam: return
-	
+func update(delta: float, cam: Camera2D):
 	# While camera is active, update global position to this node
 	cam.global_position = remote_node.global_position
+	
+	super(delta, cam)
 
 # Display warning if remote node is not set
 func _get_configuration_warnings():

@@ -2,6 +2,13 @@ extends Node
 
 #region User - Configuration Variables & Methods
 
+## A global modifier to the strength of camera shake from 1 to 0
+## Highly recommended to include an option to control shake strength in your
+## game's settings for accessibility
+var config_shake_strength: float = 1.0:
+	set(value):
+		config_shake_strength = clampf(value, 0.0, 1.0)
+
 ## Always show the currently active camera box while in game.
 ## Very useful in debugging to visualize how your camera is behaving
 var config_show_active_cam: bool = false:
@@ -25,6 +32,15 @@ func get_camera():
 		return config_override_cam
 	
 	return get_viewport().get_camera_2d()
+
+#endregion
+
+#region Backend - Signal Response
+
+signal update_camera_shake(delta: float)
+
+func _update_shake(delta: float):
+	update_camera_shake.emit(delta)
 
 #endregion
 
@@ -80,6 +96,9 @@ func try_start(action: CameraAction) -> bool:
 	active_action = action
 	action.is_in_queue = false
 	
+	# Connect active action to signal functions
+	active_action.update_shake.connect(_update_shake.bind())
+	
 	# Setup parts of this action based on the user config
 	if config_show_active_cam: action.set_debug_settings_visiblity_all(true)
 	
@@ -95,10 +114,14 @@ func end(action: CameraAction) -> void:
 	
 	# If ending the active action, search for a new active action
 	if active_action == action:
+		# Disconnect active action from signal functions
+		active_action.update_shake.disconnect(_update_shake.bind())
+		
+		# Modify the ending active action based on config
+		if config_show_active_cam: active_action.set_debug_settings_visiblity_all(false)
+		
 		active_action = null
 		
-		# Setup the ending action node based on config
-		if config_show_active_cam: action.set_debug_settings_visiblity_all(false)
 		
 		# Look for a new active action to start
 		_try_start_new_action_with_queue()

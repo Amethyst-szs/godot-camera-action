@@ -54,19 +54,16 @@ func start():
 			cam.limit_top = bounds.position.y
 			cam.limit_bottom = bounds.size.y
 
-func update_transition(delta: float):
-	var cam: Camera2D = CameraActionManager.get_camera()
-	if not cam: return
-	
+func update_transition(delta: float, cam: Camera2D):
 	_calc_target_cam_pos(cam)
-	super(delta)
-
-func update():
-	var cam: Camera2D = CameraActionManager.get_camera()
-	if not cam: return
 	
+	super(delta, cam)
+
+func update(delta: float, cam: Camera2D):
 	_calc_target_cam_pos(cam)
 	cam.global_position = target_cam_pos
+	
+	super(delta, cam)
 
 # Draw camera bounds and limits
 func _draw():

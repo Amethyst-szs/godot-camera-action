@@ -1,4 +1,3 @@
-@tool
 @icon("res://addons/camera_action/icon/CameraActionSwitcher.svg")
 
 extends Node2D

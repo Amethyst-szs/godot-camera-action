@@ -37,19 +37,16 @@ func start():
 	_remove_tween_reference("position")
 	_add_property_to_tween_reference_list("global_position", "target_pos", self, cam.global_position)
 
-func update_transition(delta: float):
-	var cam: Camera2D = CameraActionManager.get_camera()
-	if not cam: return
-	
+func update_transition(delta: float, cam: Camera2D):
 	_calc_target(cam)
-	super(delta)
-
-func update():
-	var cam: Camera2D = CameraActionManager.get_camera()
-	if not cam: return
 	
+	super(delta, cam)
+
+func update(delta: float, cam: Camera2D):
 	_calc_target(cam)
 	cam.global_position = target_pos
+	
+	super(delta, cam)
 
 func pause():
 	super()

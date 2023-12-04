@@ -24,20 +24,20 @@ func start():
 	_add_property_to_tween_reference_list("global_position", "global_position", self, cam.global_position)
 	_add_property_to_tween_reference_list("rotation_degrees", "degrees_offset", self, cam.rotation_degrees)
 
-func update_transition(delta: float):
-	super(delta)
+func update_transition(delta: float, cam: Camera2D):
 	_calc_degrees_offset()
-
-func update():
-	var cam: Camera2D = CameraActionManager.get_camera()
-	if not cam: return
 	
+	super(delta, cam)
+
+func update(delta: float, cam: Camera2D):
 	_calc_degrees_offset()
 	cam.global_position = global_position
 	cam.rotation_degrees = degrees_offset
 	
-	if not Engine.is_editor_hint() and show_in_game:
+	if show_in_game and not Engine.is_editor_hint():
 		queue_redraw()
+	
+	super(delta, cam)
 
 func _draw():
 	# Draw camera box if enabled

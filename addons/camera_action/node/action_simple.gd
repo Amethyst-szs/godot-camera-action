@@ -35,6 +35,13 @@ func start():
 	_add_property_to_tween_reference_list("rotation_degrees", "degrees", self, cam.rotation_degrees)
 	_add_property_to_tween_reference_list("offset", "offset", self, cam.offset)
 
+func update(delta: float, cam: Camera2D):
+	cam.zoom = zoom_vector
+	cam.rotation_degrees = degrees
+	cam.offset = offset
+	
+	super(delta, cam)
+
 func _draw():
 	# Draw camera box if enabled
 	if _is_camera_drawing_available():

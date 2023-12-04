@@ -16,12 +16,11 @@ func start():
 	_add_property_to_tween_reference_list("global_position", "global_position", self, cam.global_position)
 
 # Every _physics_process, update global position
-func update():
-	var cam: Camera2D = CameraActionManager.get_camera()
-	if not cam: return
-	
+func update(delta: float, cam: Camera2D):
 	# While camera is active, update global position to this node
 	cam.global_position = global_position
+	
+	super(delta, cam)
 
 # Draw camera bounding box with zoom and rotation
 func _draw():
