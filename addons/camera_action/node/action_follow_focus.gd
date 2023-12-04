@@ -27,12 +27,11 @@ func start():
 	_add_property_to_tween_reference_list("global_position", "target_pos", self, cam.global_position)
 
 func update_transition(delta: float):
-	super(delta)
-	
 	var cam: Camera2D = _get_cam()
 	if not cam: return
 	
 	_calc_target(cam)
+	super(delta)
 
 func update():
 	var cam: Camera2D = _get_cam()

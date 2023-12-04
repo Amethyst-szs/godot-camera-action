@@ -217,7 +217,7 @@ func _create_cam_tween() -> void:
 	tween.set_ease(ease_type).set_trans(ease_curve)
 
 ## Adds a property to the list that gets tweened during the action transition
-func _add_property_to_tween_reference_list(cam_var_name: String, target_var_name: String, target_object: Object, initial_value) -> void:
+func _add_property_to_tween_reference_list(cam_var_name: String, target_var_name: String, target_object: Object, initial_value, component: String = "") -> void:
 	# Ensure this same property wasn't already added earlier
 	_remove_tween_reference(cam_var_name)
 	
@@ -228,6 +228,9 @@ func _add_property_to_tween_reference_list(cam_var_name: String, target_var_name
 		"target_obj": target_object,
 		"initial": initial_value
 	}
+	
+	if not component.is_empty():
+		new_item["component"] = component
 	
 	# Add to list
 	tween_reference_list.push_back(new_item)
@@ -244,16 +247,25 @@ func _update_tween_reference_list() -> void:
 		
 		# Get target and interpolated value
 		var target = dict["target_obj"].get(dict["target"])
-		var value = tween.interpolate_value(dict["initial"], target - dict["initial"], tween_timer, length, ease_curve, ease_type)
+		var value
+		
+		if dict.has("component"):
+			var component: String = dict["component"]
+			var value_comp = tween.interpolate_value(dict["initial"][component], target[component] - dict["initial"][component], tween_timer, length, ease_curve, ease_type)
+			
+			value = cam.get(dict["cam_var"])
+			value[component] = value_comp
+		else:
+			value = tween.interpolate_value(dict["initial"], target - dict["initial"], tween_timer, length, ease_curve, ease_type)
 		
 		# Update cam var with value
 		cam.set(dict["cam_var"], value)
 
 ## Remove a tween property from the list
 ## Mainly used in inherited classes to remove a reference added by their parent
-func _remove_tween_reference(cam_var_name: String) -> void:
+func _remove_tween_reference(cam_var_name: String, componenent: String = "") -> void:
 	for item in tween_reference_list:
-		if item["cam_var"] == cam_var_name:
+		if item["cam_var"] == cam_var_name and item["component"] == componenent:
 			tween_reference_list.erase(item)
 
 ## Destroy the list of tween properties, leave. no. survivors.
