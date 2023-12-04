@@ -5,7 +5,7 @@
 [ext_resource type="Script" path="res://addons/camera_action/area/camera_area_2d.gd" id="3_7nuy1"]
 [ext_resource type="Script" path="res://addons/camera_action/node/action_simple.gd" id="4_0g5bm"]
 [ext_resource type="Script" path="res://addons/camera_action/node/action_follow.gd" id="5_fmmhq"]
-[ext_resource type="Script" path="res://addons/camera_action/node/action_line.gd" id="5_hlhtg"]
+[ext_resource type="Script" path="res://addons/camera_action/node/action_line_remote.gd" id="6_8bep4"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o6siw"]
 size = Vector2(225, 315)
@@ -16,7 +16,7 @@ size = Vector2(225, 315)
 position = Vector2(-423, 30)
 
 [node name="Sprite" type="Sprite2D" parent="."]
-position = Vector2(313, 67)
+position = Vector2(-67, -113)
 scale = Vector2(8, 8)
 texture = ExtResource("2_l2fuc")
 
@@ -42,14 +42,11 @@ ease_curve = 1
 show_camera = false
 show_limits = false
 
-[node name="CameraActionLine" type="Node2D" parent="."]
-position = Vector2(3, -291)
-script = ExtResource("5_hlhtg")
+[node name="CameraActionLineRemote" type="Node2D" parent="." node_paths=PackedStringArray("remote_node")]
+position = Vector2(-470, 58)
+script = ExtResource("6_8bep4")
+remote_node = NodePath("../Sprite")
 angle = 90.0
-min_distance = 5000.0
-max_distance = 5000.0
+zoom = 0.1
 priority = 7
 autostart = true
-length = 2.0
-ease_curve = 1
-show_in_game = true

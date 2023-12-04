@@ -12,6 +12,11 @@ class_name CameraActionFollowRemote
 	get:
 		return remote_node
 
+func _ready():
+	super()
+	if not remote_node:
+		push_error("CameraActionFollowRemote doesn't have remote node set!")
+
 func start():
 	super()
 	var cam: Camera2D = _get_cam()
