@@ -35,6 +35,9 @@ var index: int = -1
 ## Direction for sequence to be moving (used by ping-pong mode to reverse direction)
 var direction: int = 1
 
+## Is the sequence currently paused?
+var is_paused: bool = false
+
 #endregion
 
 #region User Functions
@@ -46,6 +49,9 @@ func sequence_start():
 		return
 	
 	index = 0
+	direction = 1
+	time = 0.0
+	is_paused = false
 	start_by_index(index)
 
 ## Step through the sequence by some value (default: 1 index)
@@ -54,6 +60,7 @@ func sequence_step(step: int = 1):
 		push_error("Cannot step in CameraActionSequence with no actions in list")
 		return
 	
+	is_paused = false
 	index = clampi(index + (step * direction), -1, action_list.size())
 	
 	if (index == action_list.size() and direction > 0) or (index == -1 and direction < 0):
@@ -82,6 +89,7 @@ func sequence_set(new_index: int):
 		push_error("Cannot set index of CameraActionSequence with no actions in list")
 		return
 	
+	is_paused = false
 	index = clampi(new_index, 0, action_list.size() - 1)
 	start_by_index(index)
 
@@ -89,10 +97,13 @@ func sequence_set(new_index: int):
 func sequence_end():
 	index = -1
 	direction = 1
+	time = 0.0
+	is_paused = false
 	end_active()
 
 ## End the sequence but store the current index and direction for later use in resume
 func sequence_pause():
+	is_paused = true
 	end_active()
 
 ## Start the sequence without updating index, meant to be combined with pause
@@ -101,6 +112,7 @@ func sequence_resume():
 		push_error("Cannot resume CameraActionSequence with no actions in list")
 		return
 	
+	is_paused = false
 	index = clampi(index, 0, action_list.size() - 1)
 	start_by_index(index)
 
@@ -115,7 +127,7 @@ func _ready():
 
 func _process(delta: float):
 	if Engine.is_editor_hint(): return
-	if index == -1 or auto_timer == 0.0: return
+	if index == -1 or auto_timer == 0.0 or is_paused: return
 	
 	time += delta
 	if time >= auto_timer:

@@ -593,12 +593,13 @@ priority = 3
 length = 2.0
 ease_curve = 1
 
-[node name="Sequence" type="Node2D" parent="Cameras"]
+[node name="Sequence" type="Node2D" parent="Cameras" node_paths=PackedStringArray("action_list")]
 position = Vector2(-1194, -854)
 script = ExtResource("10_qglk4")
 loop_mode = 2
 auto_timer = 1.3
 use_children_as_list = true
+action_list = [NodePath("CameraActionFixed"), NodePath("CameraActionFixed2"), NodePath("CameraActionFixed3")]
 
 [node name="CameraActionFixed" type="Node2D" parent="Cameras/Sequence"]
 position = Vector2(-234, 2)
