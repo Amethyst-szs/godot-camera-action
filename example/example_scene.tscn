@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://x1bltb2xvatl"]
+[gd_scene load_steps=20 format=3 uid="uid://x1bltb2xvatl"]
 
 [ext_resource type="PackedScene" uid="uid://dodxjr8idtj5e" path="res://example/player/player.tscn" id="1_3fk7j"]
 [ext_resource type="Script" path="res://example/example_scene.gd" id="1_sfhww"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://addons/camera_action/action/action_fixed.gd" id="7_y0m7s"]
 [ext_resource type="Script" path="res://example/path_follow_auto.gd" id="8_eb0ia"]
 [ext_resource type="Script" path="res://addons/camera_action/action/action_path.gd" id="8_nvxcb"]
+[ext_resource type="Script" path="res://addons/camera_action/triggers/action_sequence.gd" id="10_qglk4"]
 
 [sub_resource type="TileMapPattern" id="TileMapPattern_sjcum"]
 tile_data = PackedInt32Array(0, 262144, 0, 1, 393216, 0, 65537, 524288, 0)
@@ -248,7 +249,7 @@ sources/0 = SubResource("TileSetAtlasSource_u7c51")
 pattern_0 = SubResource("TileMapPattern_sjcum")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_am6ur"]
-size = Vector2(447, 913)
+size = Vector2(447, 887)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8lgy4"]
 size = Vector2(1249, 355)
@@ -437,7 +438,6 @@ horizontal_alignment = 1
 [node name="Cameras" type="Node2D" parent="."]
 
 [node name="LineHallway" type="Node2D" parent="Cameras"]
-visible = false
 
 [node name="LineHallway1" type="Area2D" parent="Cameras/LineHallway" node_paths=PackedStringArray("filter")]
 position = Vector2(1, -719)
@@ -446,7 +446,7 @@ script = ExtResource("5_h85ae")
 filter = NodePath("../../../Player")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Cameras/LineHallway/LineHallway1"]
-position = Vector2(-0.5, -39.5)
+position = Vector2(-0.5, -52.5)
 shape = SubResource("RectangleShape2D_am6ur")
 
 [node name="CameraActionLine" type="Node2D" parent="Cameras/LineHallway/LineHallway1"]
@@ -456,6 +456,7 @@ min_distance = 875.0
 max_distance = 1500.0
 ease_components = 0
 priority = 3
+length = 1.5
 ease_curve = 1
 show_camera = false
 
@@ -476,8 +477,8 @@ min_distance = 2000.0
 max_distance = 2000.0
 ease_components = 1
 priority = 2
-length = 0.5
-ease_curve = 1
+length = 0.8
+ease_curve = 3
 show_camera = false
 
 [node name="LineHallway3" type="Area2D" parent="Cameras/LineHallway" node_paths=PackedStringArray("filter")]
@@ -501,7 +502,6 @@ ease_curve = 1
 show_camera = false
 
 [node name="FixedRoom" type="Node2D" parent="Cameras"]
-visible = false
 
 [node name="CameraArea2D" type="Area2D" parent="Cameras/FixedRoom" node_paths=PackedStringArray("filter")]
 position = Vector2(2333, -429)
@@ -569,9 +569,33 @@ script = ExtResource("8_eb0ia")
 [node name="RotatePath" type="Node2D" parent="Cameras/RailRoom/Rotate/Path2D/PathFollow2D"]
 script = ExtResource("8_nvxcb")
 rotate_on_path = true
-zoom = 0.5
-degrees = -90.0
-pos_override = 1
+zoom = 0.6
+pos_override = 2
+rot_override = 2
 priority = 3
 length = 2.0
+ease_curve = 1
+
+[node name="CameraActionSequence" type="Node2D" parent="." node_paths=PackedStringArray("action_list")]
+position = Vector2(-614, -341)
+script = ExtResource("10_qglk4")
+use_children_as_list = true
+action_list = [NodePath("CameraActionFixed"), NodePath("CameraActionFixed2"), NodePath("CameraActionFixed3")]
+
+[node name="CameraActionFixed" type="Node2D" parent="CameraActionSequence"]
+position = Vector2(36, 84)
+script = ExtResource("7_y0m7s")
+priority = 7
+ease_curve = 1
+
+[node name="CameraActionFixed2" type="Node2D" parent="CameraActionSequence"]
+position = Vector2(31, 403)
+script = ExtResource("7_y0m7s")
+priority = 7
+ease_curve = 1
+
+[node name="CameraActionFixed3" type="Node2D" parent="CameraActionSequence"]
+position = Vector2(544, 586)
+script = ExtResource("7_y0m7s")
+priority = 7
 ease_curve = 1

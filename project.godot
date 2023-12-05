@@ -20,6 +20,11 @@ config/icon="res://icon.svg"
 
 CameraActionManager="*res://addons/camera_action/manager.gd"
 
+[display]
+
+window/stretch/mode="viewport"
+window/stretch/scale_mode="integer"
+
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/camera_action/plugin.cfg")

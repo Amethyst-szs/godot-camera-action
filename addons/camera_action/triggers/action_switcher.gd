@@ -1,8 +1,25 @@
+@tool
 @icon("res://addons/camera_action/icon/CameraActionSwitcher.svg")
 
 extends Node2D
 ## Switch between a different camera actions in scene by index or node name
 class_name CameraActionSwitch
+
+## Update the action list variable to be all child CameraActions
+@export var use_children_as_list: bool = false:
+	set(value):
+		use_children_as_list = value
+		action_list.clear()
+		
+		if not value:
+			notify_property_list_changed()
+			return
+		
+		for node in get_children():
+			if node is CameraAction:
+				action_list.push_back(node)
+		
+		notify_property_list_changed()
 
 ## List of actions that you can toggle between using this switcher.
 ## You'll be able to access anything in this list by index and name (non-case sensitive)
@@ -24,7 +41,13 @@ var action_name_list: Array[String]
 var active_action: CameraAction = null
 
 func _ready():
-	_update_action_name_list()
+	if not Engine.is_editor_hint():
+		_update_action_name_list()
+
+func _get_configuration_warnings():
+	# This weird line calls the setter of use_children_as_list which updates the action_list
+	if use_children_as_list: use_children_as_list = true
+	return []
 
 ## Start a camera action by index in the action list
 func start_by_index(index: int) -> void:
