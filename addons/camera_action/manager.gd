@@ -2,6 +2,16 @@ extends Node
 
 #region User - Configuration Variables & Methods
 
+## Always show the currently active camera box while in game.
+## Very useful in debugging to visualize how your camera is behaving
+var config_show_active_cam: bool = true:
+	set(value):
+		config_show_active_cam = value
+		if active_action:
+			active_action.set_debug_settings_visiblity_all(true)
+	get:
+		return config_show_active_cam
+
 ## A global modifier to the strength of camera shake from 1 to 0
 ## Highly recommended to include an option to control shake strength in your
 ## game's settings for accessibility
@@ -18,16 +28,6 @@ func is_update_mode_physics() -> bool:
 ## By default CameraActions will affect the active Camera2D in the main viewport
 ## Set this value to another Camera2D to override this behavior
 var config_override_cam: Camera2D = null
-
-## Always show the currently active camera box while in game.
-## Very useful in debugging to visualize how your camera is behaving
-var config_show_active_cam: bool = true:
-	set(value):
-		config_show_active_cam = value
-		if active_action:
-			active_action.set_debug_settings_visiblity_all(true)
-	get:
-		return config_show_active_cam
 
 #endregion
 
