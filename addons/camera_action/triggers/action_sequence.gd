@@ -1,5 +1,5 @@
 @tool
-@icon("res://icon.svg")
+@icon("res://addons/camera_action/icon/CameraActionSequencer.svg")
 
 extends CameraActionSwitch
 ## Advance through different camera actions in a specific order
@@ -12,8 +12,10 @@ enum LoopType {
 	END,
 	## Go back to the first action in the list and continue
 	REPEAT,
-	## Go through the list backwards, bouncing back and fourth through the list
-	PING_PONG
+	## Go through the list forward and backward, ending after one full cycle
+	PING_PONG_ONCE,
+	## Go through the list, bouncing back and fourth through the list
+	PING_PONG,
 }
 
 ## When reaching the end of the action list, how should this behave?
@@ -61,6 +63,13 @@ func sequence_step(step: int = 1):
 				return
 			LoopType.REPEAT:
 				index = 0
+			LoopType.PING_PONG_ONCE:
+				if index == -1:
+					sequence_end()
+					return
+				else:
+					direction *= -1
+					index += direction * 2
 			LoopType.PING_PONG:
 				direction *= -1
 				index += direction * 2
