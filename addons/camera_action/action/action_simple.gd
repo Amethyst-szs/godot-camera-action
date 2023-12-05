@@ -83,8 +83,8 @@ func update(delta: float, cam: Camera2D):
 	
 	super(delta, cam)
 
-func pause():
-	super()
+func pause(is_ending: bool = false):
+	super(is_ending)
 	
 	var cam: Camera2D = CameraActionManager.get_camera()
 	if not cam: return

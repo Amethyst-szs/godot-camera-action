@@ -48,9 +48,6 @@ func update(delta: float, cam: Camera2D):
 	
 	super(delta, cam)
 
-func pause():
-	super()
-
 func _calc_target(cam: Camera2D):
 	var cam_parent: Node2D = cam.get_parent()
 	if not cam_parent: return
