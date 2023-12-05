@@ -31,6 +31,16 @@ var config_override_cam: Camera2D = null
 
 #endregion
 
+#region User - Signals
+
+signal action_started(action: CameraAction)
+
+signal action_ended(action: CameraAction)
+
+signal highest_priority_changed(priority: PriorityType)
+
+#endregion
+
 #region Backend - Utilities
 
 func get_camera():
@@ -41,7 +51,7 @@ func get_camera():
 
 #endregion
 
-#region Backend - Signal Response
+#region Backend - Shake Signal Response
 
 signal update_camera_shake(delta: float)
 
@@ -70,7 +80,12 @@ enum PriorityType {
 var action_queue: Array[CameraAction] = []
 
 ## The current priority of the active_action, used to compare against when an action is started
-var active_priority := PriorityType.NONE
+var active_priority := PriorityType.NONE:
+	set(value):
+		if value != active_priority:
+			highest_priority_changed.emit(value)
+		
+		active_priority = value
 
 ## Current CameraAction node that is controlling the camera
 var active_action: CameraAction = null
@@ -119,6 +134,7 @@ func try_start(action: CameraAction) -> bool:
 	# Setup parts of this action based on the user config
 	if config_show_active_cam: action.set_debug_settings_visiblity_all(true)
 	
+	action_started.emit(active_action)
 	return true
 
 ## Called whenever a CameraAction is ended, either by the user or cause it is leaving the tree
@@ -137,6 +153,7 @@ func end(action: CameraAction) -> void:
 		# Modify the ending active action based on config
 		if config_show_active_cam: active_action.set_debug_settings_visiblity_all(false)
 		
+		action_ended.emit(active_action)
 		previous_action = active_action
 		active_action = null
 		
