@@ -33,10 +33,13 @@ var config_override_cam: Camera2D = null
 
 #region User - Signals
 
+## Emitted whenever the active action changes to a new action, includes the activated action as a parameter
 signal action_started(action: CameraAction)
 
+## Emitted whenever the active action is ended, includes the now inactive action as a parameter
 signal action_ended(action: CameraAction)
 
+## Emitted when the highest priority level is changed, either from it increasing or decreasing
 signal highest_priority_changed(priority: PriorityType)
 
 #endregion
