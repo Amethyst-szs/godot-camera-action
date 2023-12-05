@@ -73,15 +73,32 @@ const zero_vec: Vector2 = Vector2.ZERO
 
 #endregion
 
-#region Virtual Functions
+#region Signals
 
-## Automatically run start if flag is set in inspector
-func _ready():
-	if not Engine.is_editor_hint() and autostart:
-		start()
+## Fired when the action has its "start" method called, regardless of taking control of camera
+signal action_enabled
+
+## Fired when the action starts its transition animation to take control of the camera
+signal action_transitioning
+
+## Fired when the transition is finished and it is fully controlling the camera
+signal action_transition_finished
+
+## Fired when the action is interrupted by another action of higher priority
+signal action_paused
+
+## Fired when the action is manually ended and fully deactivated
+signal action_ended
+
+#endregion
+
+#region End-user Functions
 
 ## Start function, updates and animates camera
-func start():
+func start() -> void:
+	## Emit start signal
+	action_enabled.emit()
+	
 	# Check if this action's priority is higher than the current action
 	if not CameraActionManager.try_start(self):
 		return
@@ -92,19 +109,52 @@ func start():
 	# Create tween and set start flag
 	_create_cam_tween()
 	is_starting = true
+	
+	## Emit transitioning signal
+	action_transitioning.emit()
+
+## Called to end this CameraAction. Has no effect if "start" wasn't already called.
+func end() -> void:
+	pause(true)
+	CameraActionManager.end(self)
+	
+	action_ended.emit()
+
+## Checks if this action is in the priority queue, transitioning, or controlling the camera
+func is_enabled() -> bool:
+	return is_starting or is_running or is_in_queue
+
+## Checks if this action is either transitioning or fully controlling the camera
+func is_controlling_camera() -> bool:
+	return is_starting or is_running
+
+## Checks if the action is in the priority queue but not controlling the camera
+func is_in_priority_queue() -> bool:
+	return is_in_queue
+
+#endregion
+
+#region Virtual Functions
+
+## Automatically run start if flag is set in inspector
+func _ready() -> void:
+	if not Engine.is_editor_hint() and autostart:
+		start()
 
 ## Once the transition animation is complete, this function is called, updating status.
-func start_finished():
+func start_finished() -> void:
 	is_starting = false
 	is_running = true
 	
 	tween.kill()
 	tween = null
 	_destroy_tween_reference_list()
+	
+	action_transition_finished.emit()
 
 ## Called every frame during _physics_process if the is_staring flag is set.
 ## This means it will only be called during the tween transition
-func update_transition(delta: float, cam: Camera2D):
+func update_transition(delta: float, cam: Camera2D) -> void:
 	_update_tween_reference_list()
 	
 	if self == CameraActionManager.active_action:
@@ -122,7 +172,7 @@ func update(delta: float, cam: Camera2D):
 
 ## Called when the CameraActionManager is given a new CameraAction with a higher priority than this one.
 ## This action will be placed in the queue and wait for itself to be highest priority again
-func pause():
+func pause(is_ending: bool = false):
 	is_starting = false
 	is_running = false
 	tween_timer = 0.0
@@ -132,11 +182,9 @@ func pause():
 		tween = null
 	
 	_destroy_tween_reference_list()
-
-## Called to end this CameraAction. Has no effect if "start" wasn't already called.
-func end():
-	pause()
-	CameraActionManager.end(self)
+	
+	if not is_ending:
+		action_paused.emit()
 
 ## Update camera if update mode is idle
 ## Also queues a redraw of the editor debug info if the editor hint exists
