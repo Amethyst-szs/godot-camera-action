@@ -38,12 +38,18 @@ var zoom_vector: Vector2 = Vector2.ONE
 @export var offset: Vector2 = Vector2.ZERO
 
 @export_group("Optional Overrides")
+
 @export_subgroup("Position Smoothing")
 @export var pos_override := OverrideType.UNCHANGED
 @export_range(0.5, 25.0, 0.5, "or_greater") var pos_speed: float = 5.0
+var pos_override_old: bool = false
+var pos_speed_old: float = 0.0
+
 @export_subgroup("Rotation Smoothing")
 @export var rot_override := OverrideType.UNCHANGED
 @export_range(0.5, 25.0, 0.5, "or_greater") var rot_speed: float = 5.0
+var rot_override_old: bool = false
+var rot_speed_old: float = 0.0
 
 #endregion
 
@@ -59,10 +65,14 @@ func start():
 	_add_property_to_tween_reference_list("offset", "offset", self, cam.offset)
 	
 	if not pos_override == OverrideType.UNCHANGED:
+		pos_override_old = cam.position_smoothing_enabled
+		pos_speed_old = cam.position_smoothing_speed
 		_add_property_to_tween_reference_list("position_smoothing_speed", "pos_speed", self, cam.position_smoothing_speed)
 		cam.position_smoothing_enabled = (pos_override == OverrideType.ENABLED)
 	
 	if not rot_override == OverrideType.UNCHANGED:
+		rot_override_old = cam.rotation_smoothing_enabled
+		rot_speed_old = cam.rotation_smoothing_speed
 		_add_property_to_tween_reference_list("rotation_smoothing_speed", "rot_speed", self, cam.rotation_smoothing_speed)
 		cam.rotation_smoothing_enabled = (rot_override == OverrideType.ENABLED)
 
@@ -72,6 +82,20 @@ func update(delta: float, cam: Camera2D):
 	cam.offset = offset
 	
 	super(delta, cam)
+
+func pause():
+	super()
+	
+	var cam: Camera2D = CameraActionManager.get_camera()
+	if not cam: return
+	
+	if not pos_override == OverrideType.UNCHANGED:
+		cam.position_smoothing_enabled = pos_override_old
+		cam.position_smoothing_speed = pos_speed_old
+	
+	if not rot_override == OverrideType.UNCHANGED:
+		cam.rotation_smoothing_enabled = rot_override_old
+		cam.rotation_smoothing_speed = rot_speed_old
 
 func _draw():
 	# Draw camera box if enabled

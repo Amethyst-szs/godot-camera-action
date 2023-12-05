@@ -13,12 +13,7 @@ var action: CameraAction
 #region Virtual Functions
 
 func _ready():
-	for child in get_children():
-		if child is CameraAction:
-			action = child
-			break
-	
-	if not action:
+	if not _try_get_action():
 		push_error("CameraArea2D doesn't have CameraAction as child!")
 		return
 	
@@ -28,9 +23,8 @@ func _ready():
 	body_exited.connect(exit_try_end.bind())
 
 func _get_configuration_warnings() -> PackedStringArray:
-	for child in get_children():
-		if child is CameraAction:
-			return []
+	if _try_get_action():
+		return []
 	
 	return ["This node doesn't have a CameraAction child!"]
 
@@ -45,5 +39,35 @@ func enter_try_start(node: Node):
 func exit_try_end(node: Node):
 	if node == filter or allow_any:
 		action.end()
+
+#endregion
+
+#region Util
+
+func _try_get_action() -> bool:
+	for child in get_children():
+		if child is CameraAction:
+			action = child
+			return true
+		
+		if child is Path2D:
+			if _try_find_follow_in_path(child): return true
+	
+	return false
+
+func _try_find_follow_in_path(path: Path2D) -> bool:
+	for path_child in path.get_children():
+		if path_child is PathFollow2D:
+			return try_find_action_in_follow(path_child)
+	
+	return false
+
+func try_find_action_in_follow(follow: PathFollow2D) -> bool:
+	for follow_child in follow.get_children():
+		if follow_child is CameraAction:
+			action = follow_child
+			return true
+	
+	return false
 
 #endregion

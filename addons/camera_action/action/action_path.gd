@@ -8,9 +8,12 @@ class_name CameraActionPath
 
 @export var rotate_on_path: bool = false
 
+var degrees_initial: float = 0.0
 var degrees_offset: float = 0.0
 
 func _ready():
+	degrees_initial = degrees
+	
 	if not get_parent() is PathFollow2D:
 		push_error("CameraActionRail must be a child of a PathFollow2D\n%s" % [get_path()])
 		return
@@ -30,24 +33,23 @@ func update_transition(delta: float, cam: Camera2D):
 	_calc_degrees_offset()
 	
 	super(delta, cam)
-
-func update(delta: float, cam: Camera2D):
-	_calc_degrees_offset()
-	cam.global_position = global_position
-	cam.rotation_degrees = degrees_offset
 	
 	if show_in_game and not Engine.is_editor_hint():
 		queue_redraw()
+
+func update(delta: float, cam: Camera2D):
+	cam.global_position = global_position
+	if rotate_on_path:
+		degrees = get_parent().global_rotation_degrees + degrees_initial
 	
 	super(delta, cam)
+	
+	if show_in_game and not Engine.is_editor_hint():
+		queue_redraw()
 
 func _draw():
-	# Draw camera box if enabled
-	var rotate: float = degrees
-	if rotate_on_path: rotate += global_rotation_degrees
-	
 	if _is_camera_drawing_available():
-		_draw_camera(Vector2.ZERO, zoom, rotate, _get_debug_color())
+		_draw_camera(Vector2.ZERO, zoom, degrees, _get_debug_color())
 
 # Display warning if remote node is not set
 func _get_configuration_warnings():
@@ -59,7 +61,7 @@ func _get_configuration_warnings():
 func _calc_degrees_offset():
 	if get_parent() is PathFollow2D:
 		degrees_offset = degrees
-		if rotate_on_path: degrees_offset += get_parent().rotation_degrees
+		if rotate_on_path: degrees_offset += get_parent().global_rotation_degrees
 
 func _get_debug_color() -> Color:
 	return Color.DEEP_PINK.darkened(0.2)

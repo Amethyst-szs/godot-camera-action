@@ -10,7 +10,7 @@ var config_shake_strength: float = 1.0:
 		config_shake_strength = clampf(value, 0.0, 1.0)
 
 enum CamUpdateMode { IDLE, PHYSICS }
-var config_update_mode: CamUpdateMode = CamUpdateMode.PHYSICS
+var config_update_mode: CamUpdateMode = CamUpdateMode.IDLE
 
 func is_update_mode_physics() -> bool:
 	return config_update_mode == CamUpdateMode.PHYSICS
