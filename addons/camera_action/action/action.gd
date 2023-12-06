@@ -266,6 +266,8 @@ func _draw_camera(pos_center: Vector2, zoom: float, angle: float, color: Color) 
 
 ## Draw a rectangangle out of a list of points
 func _draw_rect_from_points(points: Array[Vector2], color: Color, thickness: float):
+	if points.is_empty(): return
+	
 	draw_line(points[0], points[1], color, thickness)
 	draw_line(points[1], points[2], color, thickness)
 	draw_line(points[2], points[3], color, thickness)
@@ -273,6 +275,8 @@ func _draw_rect_from_points(points: Array[Vector2], color: Color, thickness: flo
 
 ## Draw lines converging on one point from four other points
 func _draw_converging_from_points(center: Vector2, points: Array[Vector2], color: Color, thickness: float):
+	if points.is_empty(): return
+	
 	draw_line(center, points[0], color, thickness)
 	draw_line(center, points[1], color, thickness)
 	draw_line(center, points[2], color, thickness)
@@ -378,7 +382,7 @@ func _get_default_viewport_size() -> Vector2:
 	return size
 
 func _get_viewport_size() -> Vector2:
-	if Engine.is_editor_hint():
+	if Engine.is_editor_hint() or not is_instance_valid(get_viewport()):
 		return _get_default_viewport_size()
 	
 	return get_viewport().size

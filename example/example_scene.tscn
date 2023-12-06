@@ -448,14 +448,15 @@ script = ExtResource("5_h85ae")
 filter = NodePath("../../../Player")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Cameras/LineHallway/LineHallway1"]
+visible = false
 position = Vector2(-0.5, -52.5)
 shape = SubResource("RectangleShape2D_am6ur")
 
 [node name="CameraActionLine" type="Node2D" parent="Cameras/LineHallway/LineHallway1"]
 script = ExtResource("5_gokxs")
 angle = 90.0
-min_distance = 875.0
-max_distance = 1500.0
+limit_backward = 530.0
+limit_forward = 400.0
 ease_components = 0
 priority = 3
 length = 1.5
@@ -475,8 +476,9 @@ shape = SubResource("RectangleShape2D_8lgy4")
 [node name="CameraActionLine" type="Node2D" parent="Cameras/LineHallway/LineHallway2"]
 position = Vector2(119, -16)
 script = ExtResource("5_gokxs")
-min_distance = 2000.0
-max_distance = 2000.0
+apply_limits = null
+limit_backward = 1010.0
+limit_forward = 1850.0
 ease_components = 1
 priority = 2
 length = 0.8
@@ -496,8 +498,6 @@ polygon = PackedVector2Array(-455, 211, 401, -615, 395, -71, -455, 679)
 position = Vector2(143, -121)
 script = ExtResource("5_gokxs")
 angle = 135.0
-min_distance = 10000.0
-max_distance = 10000.0
 priority = 3
 length = 0.5
 ease_type = 3
