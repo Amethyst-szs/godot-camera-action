@@ -455,7 +455,7 @@ shape = SubResource("RectangleShape2D_am6ur")
 [node name="CameraActionLine" type="Node2D" parent="Cameras/LineHallway/LineHallway1"]
 script = ExtResource("5_gokxs")
 angle = 90.0
-limit_backward = 530.0
+limit_backward = 545.0
 limit_forward = 400.0
 ease_components = 0
 priority = 3
@@ -476,9 +476,8 @@ shape = SubResource("RectangleShape2D_8lgy4")
 [node name="CameraActionLine" type="Node2D" parent="Cameras/LineHallway/LineHallway2"]
 position = Vector2(119, -16)
 script = ExtResource("5_gokxs")
-apply_limits = null
-limit_backward = 1010.0
-limit_forward = 1850.0
+limit_backward = 640.0
+limit_forward = 610.0
 ease_components = 1
 priority = 2
 length = 0.8
@@ -495,9 +494,12 @@ filter = NodePath("../../../Player")
 polygon = PackedVector2Array(-455, 211, 401, -615, 395, -71, -455, 679)
 
 [node name="CameraActionLine" type="Node2D" parent="Cameras/LineHallway/LineHallway3"]
-position = Vector2(143, -121)
+position = Vector2(-88, 89)
 script = ExtResource("5_gokxs")
 angle = 135.0
+apply_limits = true
+limit_backward = 111.0
+limit_forward = 1745.0
 priority = 3
 length = 0.5
 ease_type = 3

@@ -43,8 +43,8 @@ enum EaseComponenets {
 		limit_forward = value
 		_update_camera_bounds()
 
-const limit_top: float = 100000
-const limit_bottom: float = 100000
+var limit_top: float = 1000000
+var limit_bottom: float = 1000000
 
 ## Should the X, Y, or both vector components be eased during camera start
 @export var ease_components := EaseComponenets.BOTH
@@ -67,14 +67,21 @@ var camera_bounds: Dictionary = {}
 func _enter_tree():
 	_update_camera_bounds()
 
+func _exit_tree():
+	_disconnect_from_window_size_signal()
+
 func start():
 	super()
 	
 	var cam: Camera2D = CameraActionManager.get_camera()
 	if not tween or not cam: return
 	
-	_update_camera_bounds(cam)
+	# Calculate target position and bounds
 	_calc_target_cam_pos(cam)
+	_update_camera_bounds(cam)
+	
+	# Connect the window size change event to update bounds
+	get_tree().get_root().size_changed.connect(_update_camera_bounds.bind(cam))
 	
 	# If coming from a previous action of CameraActionLine, set ease components to both
 	var previous_action: CameraAction = CameraActionManager.previous_action
@@ -100,6 +107,10 @@ func update(delta: float, cam: Camera2D):
 	
 	super(delta, cam)
 
+func end():
+	super()
+	_disconnect_from_window_size_signal()
+
 # Draw camera bounds and limits
 func _draw():
 	if camera_bounds.is_empty(): return
@@ -113,9 +124,10 @@ func _draw():
 		if apply_limits:
 			_draw_rect_from_points(_bounds_to_array(), col.lightened(0.2), 5)
 
-# Cannot have configuration warnings
-func _get_configuration_warnings():
-	return []
+func _disconnect_from_window_size_signal():
+	var win: Window = get_tree().get_root()
+	if win.size_changed.is_connected(_update_camera_bounds):
+		win.size_changed.disconnect(_update_camera_bounds)
 
 func _get_debug_color() -> Color:
 	return Color.MEDIUM_PURPLE
@@ -143,6 +155,10 @@ func _get_base_target_pos(cam: Camera2D):
 #region Limit Bounding Utilities
 
 func _update_camera_bounds(cam: Camera2D = null) -> void:
+	# Update top and bottom limit
+	limit_top = _get_viewport_size().y
+	limit_bottom = _get_viewport_size().y
+	
 	# Converted min and max distance to boundary rectangle
 	camera_bounds  = {
 		"tl": ((Vector2.LEFT * limit_backward) + (Vector2.UP * limit_top)).rotated(angle_rad),
