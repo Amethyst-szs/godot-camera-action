@@ -17,6 +17,7 @@ enum EaseType {
 #region Variables & Exports
 
 var is_active: bool = false
+var is_manual_ease_ending: bool = false
 var active_time: float = 0.0
 var time_animation: float = 0.0
 
@@ -39,10 +40,10 @@ var time_animation: float = 0.0
 @export_group("Randomness")
 ## Complexity of shaking, low numbers make simple movements and high numbers are more eratic
 @export_range(1, 5) var complexity: int = 2
-## Every time this shake is played, should the seed to randomized?
-@export var variations: bool = true
 ## Manually changes randomness of the wave pattern the shake follows
 @export var seed: int = 0
+## Every time this shake is played, should the seed to randomized?
+@export var variations: bool = true
 
 @export_group("Size")
 ## Radius for the camera to shake in the X direction
@@ -75,6 +76,7 @@ func start() -> void:
 		return
 	
 	is_active = true
+	is_manual_ease_ending = false
 	active_time = 0.0
 	time_animation = 0.0
 	
@@ -83,6 +85,21 @@ func start() -> void:
 	
 	if not CameraActionManager.update_camera_shake.is_connected(_update):
 		CameraActionManager.update_camera_shake.connect(_update.bind())
+
+func end_ease() -> void:
+	if not is_active: return
+	
+	active_time = duration - ease_out_length
+	is_manual_ease_ending = true
+
+func end() -> void:
+	is_active = false
+	is_manual_ease_ending = false
+	active_time = 0.0
+	time_animation = 0.0
+	
+	if CameraActionManager.update_camera_shake.is_connected(_update):
+		CameraActionManager.update_camera_shake.disconnect(_update.bind())
 
 func _update(delta: float) -> void:
 	var cam: Camera2D = CameraActionManager.get_camera()
@@ -130,16 +147,8 @@ func _update(delta: float) -> void:
 		cam.zoom += Vector2(base, base) * decay_factor * modifier
 	
 	# Check if the animation has finished
-	if active_time >= duration and not infinite_duration:
+	if active_time >= duration and (not infinite_duration or is_manual_ease_ending):
 		end()
-
-func end() -> void:
-	is_active = false
-	active_time = 0.0
-	time_animation = 0.0
-	
-	if CameraActionManager.update_camera_shake.is_connected(_update):
-		CameraActionManager.update_camera_shake.disconnect(_update.bind())
 
 #endregion
 
@@ -162,6 +171,7 @@ func _is_ease_in() -> bool:
 	return easing == EaseType.EASE_IN or easing == EaseType.EASE_IN_OUT
 
 func _is_ease_out() -> bool:
-	return (easing == EaseType.EASE_OUT or easing == EaseType.EASE_IN_OUT) and not infinite_duration
+	var is_allowed: bool = not infinite_duration or is_manual_ease_ending
+	return (easing == EaseType.EASE_OUT or easing == EaseType.EASE_IN_OUT) and is_allowed
 
 #endregion
