@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://x1bltb2xvatl"]
+[gd_scene load_steps=21 format=3 uid="uid://x1bltb2xvatl"]
 
 [ext_resource type="PackedScene" uid="uid://dodxjr8idtj5e" path="res://example/player/player.tscn" id="1_3fk7j"]
 [ext_resource type="Script" path="res://example/example_scene.gd" id="1_sfhww"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://example/path_follow_auto.gd" id="8_eb0ia"]
 [ext_resource type="Script" path="res://addons/camera_action/action/action_path.gd" id="8_nvxcb"]
 [ext_resource type="Script" path="res://addons/camera_action/triggers/action_sequence.gd" id="10_qglk4"]
+[ext_resource type="Script" path="res://addons/camera_action/shake/camera_shake.gd" id="11_wqicu"]
 
 [sub_resource type="TileMapPattern" id="TileMapPattern_sjcum"]
 tile_data = PackedInt32Array(0, 262144, 0, 1, 393216, 0, 65537, 524288, 0)
@@ -609,3 +610,6 @@ script = ExtResource("7_y0m7s")
 degrees = 15.0
 priority = 7
 ease_curve = 1
+
+[node name="CameraShake" type="Node2D" parent="."]
+script = ExtResource("11_wqicu")
