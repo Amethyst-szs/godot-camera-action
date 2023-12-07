@@ -43,17 +43,17 @@ var time_animation: float = 0.0
 ## Manually changes randomness of the wave pattern the shake follows
 @export var seed: int = 0
 ## Every time this shake is played, should the seed to randomized?
-@export var variations: bool = true
+@export var randomize_seed: bool = true
 
 @export_group("Size")
 ## Radius for the camera to shake in the X direction
-@export_range(0.0, 50.0, 0.5, "or_greater", "suffix:px") var horizontal_size: float = 10.0
+@export_range(0.0, 50.0, 0.5, "or_greater", "suffix:px") var horizontal_radius: float = 10.0
 ## Radius for the camera to shake in the Y direction
-@export_range(0.0, 50.0, 0.5, "or_greater", "suffix:px") var vertical_size: float = 10.0
+@export_range(0.0, 50.0, 0.5, "or_greater", "suffix:px") var vertical_radius: float = 10.0
 ## Degrees for the camera to rotate around during shake
-@export_range(0.0, 45.0, 0.01, "or_greater", "degrees", "radians_as_degrees") var rotation_size: float = 0.0872
+@export_range(0.0, 45.0, 0.01, "or_greater", "degrees", "radians_as_degrees") var max_rotation_delta: float = 0.0872
 ## Distance for the camera to zoom exponentially
-@export_range(0.0, 0.5, 0.01, "or_greater", "suffix:exp") var zoom_size: float = 0.1
+@export_range(0.0, 0.5, 0.01, "or_greater", "suffix:%") var max_zoom_delta: float = 0.1
 
 @export_group("Components")
 ## Should the camera's position be shaken?
@@ -80,7 +80,7 @@ func start() -> void:
 	active_time = 0.0
 	time_animation = 0.0
 	
-	if variations:
+	if randomize_seed:
 		seed = randi_range(-1000000, 1000000)
 	
 	if not CameraActionManager.update_camera_shake.is_connected(_update):
@@ -132,18 +132,18 @@ func _update(delta: float) -> void:
 	# Modify components
 	if edit_position:
 		var position_offset: Vector2 = Vector2(
-			_calc_complex_wave(time_animation + rand_from_seed(seed + 2)[0]) * horizontal_size,
-			_calc_complex_wave(time_animation + rand_from_seed(seed + 4)[0]) * vertical_size
+			_calc_complex_wave(time_animation + rand_from_seed(seed + 2)[0]) * horizontal_radius,
+			_calc_complex_wave(time_animation + rand_from_seed(seed + 4)[0]) * vertical_radius
 		)
 		
 		cam.offset += position_offset * decay_factor * modifier
 	
 	if edit_rotation:
-		var base := _calc_complex_wave(time_animation + rand_from_seed(seed + 4)[0]) * rotation_size
+		var base := _calc_complex_wave(time_animation + rand_from_seed(seed + 4)[0]) * max_rotation_delta
 		cam.rotation += base * decay_factor * modifier
 	
 	if edit_zoom:
-		var base := _calc_complex_wave(time_animation + rand_from_seed(seed + 6)[0]) * zoom_size
+		var base := _calc_complex_wave(time_animation + rand_from_seed(seed + 6)[0]) * max_zoom_delta
 		cam.zoom += Vector2(base, base) * decay_factor * modifier
 	
 	# Check if the animation has finished
