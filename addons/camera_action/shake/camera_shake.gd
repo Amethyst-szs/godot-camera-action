@@ -53,7 +53,7 @@ var time_animation: float = 0.0
 ## Degrees for the camera to rotate around during shake
 @export_range(0.0, 45.0, 0.01, "or_greater", "degrees", "radians_as_degrees") var max_rotation_delta: float = 0.0872
 ## Distance for the camera to zoom exponentially
-@export_range(0.0, 99.0, 0.1, "or_greater", "suffix:%") var max_zoom_delta: float = 5.0
+@export_range(0.0, 100.0, 0.1, "or_greater", "suffix:%") var max_zoom_delta: float = 5.0
 
 @export_group("Components")
 ## Should the camera's position be shaken?
@@ -145,6 +145,11 @@ func _update(delta: float) -> void:
 	if edit_zoom:
 		var base := _calc_complex_wave(time_animation + rand_from_seed(seed + 6)[0]) * (max_zoom_delta / 100)
 		cam.zoom += Vector2(base, base) * decay_factor * modifier
+		if abs(cam.zoom) < 0.001:
+			if signf(cam.zoom) == -1:
+				cam.zoom = -0.001
+			else:
+				cam.zoom = 0.001
 	
 	# Check if the animation has finished
 	if active_time >= duration and (not infinite_duration or is_manual_ease_ending):
