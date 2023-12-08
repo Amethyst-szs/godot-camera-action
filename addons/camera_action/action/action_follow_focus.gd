@@ -14,8 +14,8 @@ class_name CameraActionFollowFocus
 	get:
 		return focus_node
 
-## What point between the camera's parent and the focus node should be targetted (Range 0-1)
-@export_range(0.0, 1.0, 0.05) var midpoint: float = 0.5
+## What point between the camera's parent and the focus node should be targetted (Range 0% - 100%)
+@export_range(0.0, 100.0, 0.01, "suffix:%") var midpoint: float = 50.0
 
 var target_pos: Vector2 = Vector2.ZERO
 var initial_zoom: float = 0.0
@@ -54,7 +54,7 @@ func _calc_target(cam: Camera2D):
 	
 	# Calculate target position using cam parent and focus node
 	var dist := cam_parent.global_position.distance_to(focus_node.global_position)
-	target_pos = cam_parent.global_position.move_toward(focus_node.global_position, dist * midpoint)
+	target_pos = cam_parent.global_position.move_toward(focus_node.global_position, dist * (midpoint / 100))
 
 func _get_configuration_warnings():
 	if not focus_node:
