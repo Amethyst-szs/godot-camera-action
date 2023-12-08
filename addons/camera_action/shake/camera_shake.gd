@@ -145,8 +145,8 @@ func _update(delta: float) -> void:
 	if edit_zoom:
 		var base := _calc_complex_wave(time_animation + rand_from_seed(seed + 6)[0]) * (max_zoom_delta / 100)
 		cam.zoom += Vector2(base, base) * decay_factor * modifier
-		if cam.zoom < 0.01:
-			cam.zoom = 0.01
+		if cam.zoom < 0.001:
+			cam.zoom = 0.001
 	
 	# Check if the animation has finished
 	if active_time >= duration and (not infinite_duration or is_manual_ease_ending):
